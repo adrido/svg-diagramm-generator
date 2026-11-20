@@ -6,8 +6,6 @@ document.querySelectorAll("[data-i]").forEach(i=>i.innerHTML=icon(paths[i.datase
 document.querySelector(".logo").innerHTML=icon("M6 2v20M2 18h20M3 14h6m-6-5h6m3 6v6m5-6v6M9 14l4-5 3 2 5-7");
 let state=preset(3),expanded=new Set(["px"]);
 const captions=["Positive X-Achse","Negative X-Achse","Positive Y-Achse","Negative Y-Achse"];
-const thumbPaths=["M9 7v27h27 M6 11l3-4 3 4m20 20 4 3-4 3","M34 35V9H7m24 22 3 4 3-4M11 6 7 9l4 3","M4 22h36M22 4v36m-3-32 3-4 3 4m11 11 4 3-4 3","M4 24h36M20 4v36m-3-32 3-4 3 4m11 13 4 3-4 3M10 21v6m20-6v6M17 14h6m-6 18h6"];
-names.forEach((name,i)=>{const b=document.createElement("button");b.className="template";b.innerHTML='<span class="thumb"><svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.8"><path d="'+thumbPaths[i]+'"/></svg></span>';b.append(name);b.onclick=()=>loadState(preset(i));$("templates").append(b)});
 const labels={title:"Achsentitel",unit:"Einheit",step:"Schrittweite",cells:"Rasterfelder",decimals:"Dezimalstellen",sign:"Vorzeichen"};
 const errors={title:"Maximal 32 druckbare Zeichen.",unit:"Maximal 32 druckbare Zeichen.",step:"Zahl größer 0 bis 1.000.000 eingeben.",cells:"Ganze Zahl von 1 bis 50 eingeben.",decimals:"Ganze Zahl von 0 bis 8 eingeben."};
 function fields(){
@@ -87,10 +85,31 @@ function loadState(s){
   $("diagram-title").value=s.general.title;$("show-title").checked=s.general.showTitle;
   $("diagram-title").removeAttribute("aria-invalid");$("title-error").textContent="";
   state=s;fields();for(const k of ["grid","frame","zero"])$(k).checked=s[k];
-  [...$("templates").children].forEach((b,i)=>b.setAttribute("aria-pressed",String(i===s.template)));
   $("save").disabled=false;$("live").textContent="Aktuell";$("message").textContent="";paint();
 }
-$("fresh").onclick=()=>loadState(preset(0));$("open").onclick=()=>$("file").click();
+for(const menu of document.querySelectorAll(".nav-menu")){
+  const trigger=menu.querySelector("summary");
+  function closeMenu(){
+    menu.open=false;
+    trigger.focus();
+  }
+  menu.addEventListener("click",event=>{
+    const item=event.target.closest("button");
+    if(!item)return;
+    closeMenu();
+    if(item.id==="open-local")$("file").click();
+    else loadState(preset(Number(item.dataset.template)));
+  });
+  menu.addEventListener("keydown",event=>{
+    if(event.key==="Escape"&&menu.open){event.preventDefault();closeMenu()}
+  });
+  menu.addEventListener("focusout",event=>{
+    if(event.relatedTarget&&!menu.contains(event.relatedTarget))menu.open=false;
+  });
+  document.addEventListener("pointerdown",event=>{
+    if(!menu.contains(event.target))menu.open=false;
+  });
+}
 $("file").onchange=async()=>{
   const file=$("file").files[0];if(!file)return;
   try{loadState(readDiagram(await file.text()));$("message").textContent="Diagramm geöffnet."}

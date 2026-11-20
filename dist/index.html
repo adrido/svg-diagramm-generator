@@ -1,8 +1,12 @@
 <!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SVG-Diagramm-Generator</title><link rel="stylesheet" href="./style.css"><script defer src="./diagram.js"></script><script defer src="./app.js"></script></head>
-<body><header><div class="brand"><span class="logo" aria-hidden="true">⌗</span>SVG-Diagramm-Generator</div><nav aria-label="Datei"><button id="fresh"><i data-i="plus"></i>Neu</button><button id="open"><i data-i="folder"></i>SVG öffnen</button><button id="save"><i data-i="save"></i>SVG speichern</button></nav><input type="file" accept=".svg,image/svg+xml" hidden id="file"></header>
+<body><header><div class="brand"><span class="logo" aria-hidden="true">⌗</span>SVG-Diagramm-Generator</div><nav aria-label="Datei"><details class="nav-menu" name="dateimenue"><summary><i data-i="plus"></i>Neu</summary>
+<div class="nav-items"><button data-template="0">+X / +Y</button><button data-template="1">−X / −Y</button><button data-template="2">Vier Richtungen</button></div></details>
+<details class="nav-menu" name="dateimenue"><summary><i data-i="folder"></i>SVG öffnen</summary>
+<div class="nav-items"><button id="open-local">Öffnen von lokaler Datei</button><button data-template="3">Beispiel Diodenkennlinie</button></div></details>
+<button id="save"><i data-i="save"></i>SVG speichern</button></nav><input type="file" accept=".svg,image/svg+xml" hidden id="file"></header>
 <main><div class="intro"><div><h1>Arbeitsbereich</h1><p>Koordinatensystem konfigurieren und als SVG exportieren.</p></div><span class="local"><i data-i="lock"></i>Lokal im Browser</span></div>
-<div id="message" role="status"></div><section aria-labelledby="tpl"><h2 class="over" id="tpl">Vorlagen</h2><div class="templates" id="templates"></div></section>
+<div id="message" role="status"></div>
 <div class="workspace"><aside><details class="general" open><summary>Allgemeine Einstellungen</summary>
 <div class="fields">
 <label class="full">Diagrammname / Titel<input id="diagram-title" maxlength="120" aria-describedby="title-error"><small id="title-error" class="error"></small></label>

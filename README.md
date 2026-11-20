@@ -4,7 +4,7 @@ Statische, deutschsprachige Browser-App. Zum lokalen Start dist/index.html in ei
 
 Für GitHub Pages den Inhalt von dist/ in den Stammordner eines GitHub-Repositorys kopieren. Unter Settings → Pages → Deploy from a branch den Branch und /(root) wählen. Alle Ressourcen verwenden relative Pfade. Für eine Veröffentlichung unter MIT eine LICENSE mit dem MIT-Lizenztext und dem eigenen Copyright-Vermerk ergänzen.
 
-Die erste Ansicht verwendet die Diodenvorlage. „Neu“ startet mit +X / +Y. Ein Unterstrich im Titel leitet den Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
+Die erste Ansicht verwendet die Diodenvorlage. Unter „Neu“ stehen +X / +Y, −X / −Y und Vier Richtungen zur Auswahl. „SVG öffnen“ öffnet eine lokale Datei oder lädt das Beispiel Diodenkennlinie. Ein Unterstrich im Titel leitet den Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
 
 SVG speichern exportiert das angezeigte Diagramm samt Einstellungen (schemaVersion 2). SVG öffnen liest ausschließlich den JSON-Eintrag im metadata-Element mit der ID svg-diagramm-generator-einstellungen. Dateien werden ausschließlich im Browser verarbeitet.
 
