@@ -3,5 +3,11 @@
 <body><header><div class="brand"><span class="logo" aria-hidden="true">⌗</span>SVG-Diagramm-Generator</div><nav aria-label="Datei"><button id="fresh"><i data-i="plus"></i>Neu</button><button id="open"><i data-i="folder"></i>SVG öffnen</button><button id="save"><i data-i="save"></i>SVG speichern</button></nav><input type="file" accept=".svg,image/svg+xml" hidden id="file"></header>
 <main><div class="intro"><div><h1>Arbeitsbereich</h1><p>Koordinatensystem konfigurieren und als SVG exportieren.</p></div><span class="local"><i data-i="lock"></i>Lokal im Browser</span></div>
 <div id="message" role="status"></div><section aria-labelledby="tpl"><h2 class="over" id="tpl">Vorlagen</h2><div class="templates" id="templates"></div></section>
-<div class="workspace"><aside><div class="panelhead"><i data-i="sliders"></i><h2>Achseneinstellungen</h2></div><div id="axes"></div></aside>
+<div class="workspace"><aside><details class="general" open><summary>Allgemeine Einstellungen</summary>
+<div class="fields">
+<label class="full">Diagrammname / Titel<input id="diagram-title" maxlength="120" aria-describedby="title-error"><small id="title-error" class="error"></small></label>
+<label>Breite (px)<input id="width" inputmode="decimal" aria-describedby="width-error"><small class="error" id="width-error"></small></label>
+<label>Höhe (px)<input id="height" inputmode="decimal" aria-describedby="height-error"><small class="error" id="height-error"></small></label>
+<label class="full check"><input type="checkbox" id="show-title">Titel im Diagramm anzeigen</label>
+</div></details><div class="panelhead"><i data-i="sliders"></i><h2>Achseneinstellungen</h2></div><div id="axes"></div></aside>
 <section class="preview"><div class="panelhead"><i data-i="graph"></i><h2>Live-Vorschau</h2><span id="live">Aktuell</span></div><div class="stage"><div id="sheet"></div></div><div class="options" id="options"></div></section></div></main></body></html>

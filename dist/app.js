@@ -34,8 +34,24 @@ for(const [k,label] of [["grid","Raster"],["frame","Rahmen"],["zero","Nullbeschr
   const wrap=document.createElement("label"),f=document.createElement("input");f.type="checkbox";f.id=k;f.oninput=update;wrap.append(f,label);$("options").append(wrap);
 }
 function paint(){$("sheet").replaceChildren(renderDiagram(state))}
+for(const id of ["width","height","diagram-title","show-title"])$(id).oninput=update;
 function update(){
   const next=structuredClone(state);let ok=true;
+  for(const k of ["width","height"]){
+    const field=$(k), raw=field.value.trim().replace(",",".");
+    const value=/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw)?Number(raw):NaN;
+    const valid=validDimension(value);
+    field.setAttribute("aria-invalid",String(!valid));
+    $(k+"-error").textContent=valid?"":"1 bis 20.000 Pixel eingeben.";
+    next.general[k]=value;
+    ok&&=valid;
+  }
+  next.general.title=$("diagram-title").value;
+  next.general.showTitle=$("show-title").checked;
+  const titleValid=validTitle(next.general.title);
+  $("diagram-title").setAttribute("aria-invalid",String(!titleValid));
+  $("title-error").textContent=titleValid?"":"Maximal 120 druckbare Zeichen eingeben.";
+  ok&&=titleValid;
   for(const d of dirs){
     next.axes[d].active=$(d+"-active").checked;
     for(const k of Object.keys(labels)){
@@ -48,6 +64,12 @@ function update(){
   if(ok){for(const k of ["grid","frame","zero"])next[k]=$(k).checked;state=next;paint()}
 }
 function loadState(s){
+  for(const k of ["width","height"]){
+    $(k).value=String(s.general[k]).replace(".",",");
+    $(k).removeAttribute("aria-invalid");$(k+"-error").textContent="";
+  }
+  $("diagram-title").value=s.general.title;$("show-title").checked=s.general.showTitle;
+  $("diagram-title").removeAttribute("aria-invalid");$("title-error").textContent="";
   state=s;fields();for(const k of ["grid","frame","zero"])$(k).checked=s[k];
   [...$("templates").children].forEach((b,i)=>b.setAttribute("aria-pressed",String(i===s.template)));
   $("save").disabled=false;$("live").textContent="Aktuell";$("message").textContent="";paint();
@@ -77,6 +99,6 @@ function serializeDiagram(svg) {
 $("save").onclick=()=>{
   const xml=serializeDiagram($("sheet").firstElementChild);
   const url=URL.createObjectURL(new Blob([xml],{type:"image/svg+xml;charset=utf-8"})),link=document.createElement("a");
-  link.href=url;link.download="koordinatensystem.svg";document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  link.href=url;link.download=downloadName(state.general.title);document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
 };
 loadState(state);

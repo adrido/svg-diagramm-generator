@@ -5,7 +5,26 @@ const names=["+X / +Y","−X / −Y","Vier Richtungen","Diodenkennlinie – Achs
 function preset(n){
   const axes={};
   dirs.forEach((d,i)=>{axes[d]={active:n>=2 || (n===0?i%2===0:i%2===1),title:n===3?["U_F","U_R","I_F","I_R"][i]:i<2?"x":"y",unit:n===3?(i<2?"V":"mA"):"",step:n===3?[.1,2,.5,1][i]:1,cells:n===3?[9,8,5,5][i]:5,decimals:n===3&&i%2===0?1:0,sign:n===3||i%2===0?"amount":"negative"}});
-  return {schemaVersion:1,template:n,axes,grid:true,frame:true,zero:true};
+  return {schemaVersion:2,template:n,axes,grid:true,frame:true,zero:true,general:defaultGeneral(axes,n)};
+}
+function geometry(a){
+  const cell=56,count=d=>a[d].active?a[d].cells:0;
+  const w=(count("nx")+count("px"))*cell,h=(count("ny")+count("py"))*cell;
+  const ox=count("nx")*cell,oy=count("py")*cell;
+  const padX=Math.max(26,...["py","ny"].filter(d=>a[d].active).map(d=>(a[d].title.length+a[d].unit.length+4)*6));
+  const padY=45;
+  return {w,h,ox,oy,padX,padY,cell};
+}
+function defaultGeneral(axes,template){
+  const {w,h,padX,padY}=geometry(axes);
+  return {width:w+2*padX,height:h+2*padY,title:template===3?"Diodenkennlinie":"Koordinatensystem",showTitle:false};
+}
+function validDimension(v){return Number.isFinite(v)&&v>=1&&v<=20000}
+function validTitle(v){return typeof v==="string"&&v.length<=120&&!/[\u0000-\u001f\ud800-\udfff\ufffe\uffff]/u.test(v)}
+function downloadName(title){
+  let base=title.trim().replace(/\.svg$/i,"").replace(/[<>:"/\\|?*]/g,"-").replace(/^[. ]+|[. ]+$/g,"");
+  if(/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(\.|$)/i.test(base))base="_"+base;
+  return (base||"Koordinatensystem")+".svg";
 }
 function validValue(k,v){
   if(["title","unit"].includes(k))return typeof v==="string" && v.length<=32 && !/[\u0000-\u001f\ud800-\udfff\ufffe\uffff]/u.test(v);
@@ -15,8 +34,11 @@ function validValue(k,v){
   return Number.isInteger(v)&&(k==="cells"?v>=1&&v<=50:v>=0&&v<=8);
 }
 function validate(s){
-  if(!s||s.schemaVersion!==1)throw Error("Diese Schemaversion wird nicht unterstützt.");
+  if(!s||![1,2].includes(s.schemaVersion))throw Error("Diese Schemaversion wird nicht unterstützt.");
   if(!names[s.template]||!Number.isInteger(s.template)||!["grid","frame","zero"].every(k=>typeof s[k]==="boolean")||!dirs.every(d=>s.axes?.[d]&&Object.keys(preset(3).axes[d]).every(k=>validValue(k,s.axes[d][k]))))throw Error("Die Datei enthält ungültige Diagrammeinstellungen.");
+  if(s.schemaVersion===1)return {...s,schemaVersion:2,general:defaultGeneral(s.axes,s.template)};
+  const g=s.general;
+  if(!g||!validDimension(g.width)||!validDimension(g.height)||!validTitle(g.title)||typeof g.showTitle!=="boolean")throw Error("Die allgemeinen Diagrammeinstellungen sind ungültig.");
   return s;
 }
 function readDiagram(source){
@@ -36,14 +58,20 @@ function renderDiagram(s){
     if(value!==undefined)el.textContent=value;
     parent.append(el);return el;
   }
-  const a=s.axes,cell=56,count=d=>a[d].active?a[d].cells:0;
-  const w=(count("nx")+count("px"))*cell,h=(count("ny")+count("py"))*cell;
-  const ox=count("nx")*cell,oy=count("py")*cell;
-  const padX=Math.max(26,...["py","ny"].filter(d=>a[d].active).map(d=>(a[d].title.length+a[d].unit.length+4)*6));
-  const padY=45;
-  svg.setAttribute("viewBox",[-padX,-padY,w+2*padX,h+2*padY].join(" "));
+  const a=s.axes, {w,h,ox,oy,padX,padY,cell}=geometry(a);
+  const {width,height,title,showTitle}=s.general;
+  const heading=showTitle?title.trim():"";
+  const headingSpace=heading?40:0;
+  svg.setAttribute("width",width);
+  svg.setAttribute("height",height);
+  svg.setAttribute("viewBox",[-padX,-padY-headingSpace,w+2*padX,h+2*padY+headingSpace].join(" "));
   svg.setAttribute("font-family","Arial, sans-serif");svg.setAttribute("font-size","16");svg.setAttribute("fill","#253043");
-  add("title",{},"Koordinatensystem · "+names[s.template]);add("metadata",{id:META},JSON.stringify(s));
+  add("title",{},title.trim()||"Koordinatensystem · "+names[s.template]);
+  if(heading){
+    const size=Math.min(24,(w+2*padX-12)/Array.from(heading).length);
+    add("text",{x:w/2,y:-padY-10,"text-anchor":"middle","font-size":size,"font-weight":"bold"},heading);
+  }
+  add("metadata",{id:META},JSON.stringify(s));
   function line(x1,y1,x2,y2,color,width){add("line",{x1,y1,x2,y2,stroke:color,"stroke-width":width})}
   function label(x,y,value,anchor="middle"){return add("text",{x,y,"text-anchor":anchor},value)}
   if(s.grid){for(let x=0;x<=w;x+=cell)line(x,0,x,h,"#c1c8d1",1);for(let y=0;y<=h;y+=cell)line(0,y,w,y,"#c1c8d1",1)}

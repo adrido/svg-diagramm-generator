@@ -6,4 +6,6 @@ Für GitHub Pages den Inhalt von dist/ in den Stammordner eines GitHub-Repositor
 
 Die erste Ansicht verwendet die Diodenvorlage. „Neu“ startet mit +X / +Y. Ein Unterstrich im Titel leitet den Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
 
-SVG speichern exportiert das angezeigte Diagramm samt Einstellungen (schemaVersion 1). SVG öffnen liest ausschließlich den JSON-Eintrag im metadata-Element mit der ID svg-diagramm-generator-einstellungen. Dateien werden ausschließlich im Browser verarbeitet.
+SVG speichern exportiert das angezeigte Diagramm samt Einstellungen (schemaVersion 2). SVG öffnen liest ausschließlich den JSON-Eintrag im metadata-Element mit der ID svg-diagramm-generator-einstellungen. Dateien werden ausschließlich im Browser verarbeitet.
+
+Unter „Allgemeine Einstellungen“ legen Breite und Höhe die gesamte SVG-Zeichenfläche in Pixeln fest. Das Koordinatensystem wird proportional eingepasst. Der Diagrammname bestimmt den Dateinamen und kann als Überschrift angezeigt werden. Bei leerem Namen wird Koordinatensystem.svg verwendet. Dateien der Version 1 übernehmen ihre bisherigen Zeichenflächenmaße und erhalten einen ausgeblendeten Standardtitel.
