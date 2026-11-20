@@ -19,6 +19,11 @@ function defaultGeneral(axes,template){
   const {w,h,padX,padY}=geometry(axes);
   return {width:w+2*padX,height:h+2*padY,title:template===3?"Diodenkennlinie":"Koordinatensystem",showTitle:false};
 }
+// Breite und Höhe bleiben in den Metadaten kompatibel zu früheren Pixel-Dateien.
+const pixelsPerMillimeter=96/25.4;
+function dimensionInUnit(pixels,unit){
+  return unit==="mm"?Number((pixels/pixelsPerMillimeter).toFixed(12)):pixels;
+}
 function validDimension(v){return Number.isFinite(v)&&v>=1&&v<=20000}
 function validTitle(v){return typeof v==="string"&&v.length<=120&&!/[\u0000-\u001f\ud800-\udfff\ufffe\uffff]/u.test(v)}
 function downloadName(title){
@@ -38,7 +43,7 @@ function validate(s){
   if(!names[s.template]||!Number.isInteger(s.template)||!["grid","frame","zero"].every(k=>typeof s[k]==="boolean")||!dirs.every(d=>s.axes?.[d]&&Object.keys(preset(3).axes[d]).every(k=>validValue(k,s.axes[d][k]))))throw Error("Die Datei enthält ungültige Diagrammeinstellungen.");
   if(s.schemaVersion===1)return {...s,schemaVersion:2,general:defaultGeneral(s.axes,s.template)};
   const g=s.general;
-  if(!g||!validDimension(g.width)||!validDimension(g.height)||!validTitle(g.title)||typeof g.showTitle!=="boolean")throw Error("Die allgemeinen Diagrammeinstellungen sind ungültig.");
+  if(!g||(g.sizeUnit!==undefined&&!["px","mm"].includes(g.sizeUnit))||!validDimension(g.width)||!validDimension(g.height)||!validTitle(g.title)||typeof g.showTitle!=="boolean")throw Error("Die allgemeinen Diagrammeinstellungen sind ungültig.");
   return s;
 }
 function readDiagram(source){
@@ -62,8 +67,9 @@ function renderDiagram(s){
   const {width,height,title,showTitle}=s.general;
   const heading=showTitle?title.trim():"";
   const headingSpace=heading?40:0;
-  svg.setAttribute("width",width);
-  svg.setAttribute("height",height);
+  const unit=s.general.sizeUnit||"px";
+  svg.setAttribute("width",dimensionInUnit(width,unit)+unit);
+  svg.setAttribute("height",dimensionInUnit(height,unit)+unit);
   svg.setAttribute("viewBox",[-padX,-padY-headingSpace,w+2*padX,h+2*padY+headingSpace].join(" "));
   svg.setAttribute("font-family","Arial, sans-serif");svg.setAttribute("font-size","16");svg.setAttribute("fill","#253043");
   add("title",{},title.trim()||"Koordinatensystem · "+names[s.template]);

@@ -35,15 +35,29 @@ for(const [k,label] of [["grid","Raster"],["frame","Rahmen"],["zero","Nullbeschr
 }
 function paint(){$("sheet").replaceChildren(renderDiagram(state))}
 for(const id of ["width","height","diagram-title","show-title"])$(id).oninput=update;
+function displayDimensions(general,unit){
+  for(const k of ["width","height"]){
+    $(k+"-unit").textContent=unit;
+    $(k).value=String(dimensionInUnit(general[k],unit)).replace(".",",");
+  }
+}
+$("size-unit").onchange=()=>{
+  displayDimensions(state.general,$("size-unit").value);
+  update();
+};
 function update(){
   const next=structuredClone(state);let ok=true;
+  const unit=$("size-unit").value;
+  next.general.sizeUnit=unit;
   for(const k of ["width","height"]){
     const field=$(k), raw=field.value.trim().replace(",",".");
     const value=/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw)?Number(raw):NaN;
-    const valid=validDimension(value);
+    const previous=state.general[k];
+    const pixels=value===dimensionInUnit(previous,unit)?previous:value*(unit==="mm"?pixelsPerMillimeter:1);
+    const valid=validDimension(pixels);
     field.setAttribute("aria-invalid",String(!valid));
-    $(k+"-error").textContent=valid?"":"1 bis 20.000 Pixel eingeben.";
-    next.general[k]=value;
+    $(k+"-error").textContent=valid?"":unit==="mm"?"Maß in mm eingeben (entsprechend 1 bis 20.000 px).":"1 bis 20.000 Pixel eingeben.";
+    next.general[k]=pixels;
     ok&&=valid;
   }
   next.general.title=$("diagram-title").value;
@@ -60,12 +74,14 @@ function update(){
       const good=validValue(k,v);f.setAttribute("aria-invalid",String(!good));$("err-"+f.id).textContent=good?"":errors[k];ok&&=good;next.axes[d][k]=v;
     }
   }
-  $("save").disabled=!ok;$("live").textContent=ok?"Aktuell":"Eingabe prüfen";$("message").textContent="";
+  $("size-unit").disabled=!ok;$("save").disabled=!ok;$("live").textContent=ok?"Aktuell":"Eingabe prüfen";$("message").textContent="";
   if(ok){for(const k of ["grid","frame","zero"])next[k]=$(k).checked;state=next;paint()}
 }
 function loadState(s){
+  const unit=s.general.sizeUnit||"px";
+  $("size-unit").value=unit;$("size-unit").disabled=false;
+  displayDimensions(s.general,unit);
   for(const k of ["width","height"]){
-    $(k).value=String(s.general[k]).replace(".",",");
     $(k).removeAttribute("aria-invalid");$(k+"-error").textContent="";
   }
   $("diagram-title").value=s.general.title;$("show-title").checked=s.general.showTitle;
