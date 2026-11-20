@@ -59,8 +59,23 @@ $("file").onchange=async()=>{
   catch(e){$("message").textContent="Öffnen fehlgeschlagen. "+e.message}
   $("file").value="";
 };
+function serializeDiagram(svg) {
+  const copy = svg.cloneNode(true);
+  for (const element of Array.from(copy.children)) {
+    if (element.localName === "metadata" && element.id === META) {
+      const settings = JSON.parse(element.textContent);
+      const lines = JSON.stringify(settings, null, 2).split("\n");
+      element.textContent = "\n    " + lines.join("\n    ") + "\n  ";
+    }
+    // Innerhalb von <text> würde zusätzlicher Leerraum die Beschriftung ändern.
+    element.before("\n  ");
+  }
+  copy.append("\n");
+  const xml = new XMLSerializer().serializeToString(copy);
+  return '<?xml version="1.0" encoding="UTF-8"?>\n' + xml + "\n";
+}
 $("save").onclick=()=>{
-  const xml=new XMLSerializer().serializeToString($("sheet").firstElementChild);
+  const xml=serializeDiagram($("sheet").firstElementChild);
   const url=URL.createObjectURL(new Blob([xml],{type:"image/svg+xml;charset=utf-8"})),link=document.createElement("a");
   link.href=url;link.download="koordinatensystem.svg";document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
 };
