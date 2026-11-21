@@ -6,14 +6,14 @@ const gridDivisions=[2,4,5,10];
 function defaultMinorGrid(){return {enabled:false,divisions:5}}
 function preset(n){
   const axes={};
-  dirs.forEach((d,i)=>{axes[d]={active:n>=2 || (n===0?i%2===0:i%2===1),title:n===3?["U_F","U_R","I_F","I_R"][i]:i<2?"x":"y",unit:n===3?(i<2?"V":"mA"):"",step:n===3?[.1,2,.5,1][i]:1,cells:n===3?[9,8,5,5][i]:5,decimals:n===3&&i%2===0?1:0,sign:n===3||i%2===0?"amount":"negative"}});
-  return {schemaVersion:2,template:n,axes,grid:true,minorGrid:defaultMinorGrid(),frame:true,zero:true,general:defaultGeneral(axes,n)};
+  dirs.forEach((d,i)=>{axes[d]={active:n>=2 || (n===0?i%2===0:i%2===1),title:n===3?"":(i<2?"x":"y"),symbol:n===3?["U_F","U_R","I_F","I_R"][i]:"",unit:n===3?(i<2?"V":"mA"):"",step:n===3?[.1,2,.5,1][i]:1,cells:n===3?[9,8,5,5][i]:5,decimals:n===3&&i%2===0?1:0,sign:n===3||i%2===0?"amount":"negative"}});
+  return {schemaVersion:2,template:n,axes,grid:true,minorGrid:defaultMinorGrid(),frame:true,zero:true,general:{...defaultGeneral(axes,n),unitFormat:"slash"}};
 }
 function geometry(a){
   const cell=56,count=d=>a[d].active?a[d].cells:0;
   const w=(count("nx")+count("px"))*cell,h=(count("ny")+count("py"))*cell;
   const ox=count("nx")*cell,oy=count("py")*cell;
-  const padX=Math.max(26,...["py","ny"].filter(d=>a[d].active).map(d=>(a[d].title.length+a[d].unit.length+4)*6));
+  const padX=Math.max(26,...["py","ny"].filter(d=>a[d].active).map(d=>(a[d].title.length+(a[d].symbol||"").length+a[d].unit.length+4)*6));
   const padY=45;
   return {w,h,ox,oy,padX,padY,cell};
 }
@@ -34,21 +34,53 @@ function downloadName(title){
   return (base||"Koordinatensystem")+".svg";
 }
 function validValue(k,v){
-  if(["title","unit"].includes(k))return typeof v==="string" && v.length<=32 && !/[\u0000-\u001f\ud800-\udfff\ufffe\uffff]/u.test(v);
+  if(["title","symbol","unit"].includes(k))return typeof v==="string" && v.length<=32 && !/[\u0000-\u001f\ud800-\udfff\ufffe\uffff]/u.test(v);
   if(k==="active")return typeof v==="boolean";
   if(k==="sign")return ["amount","negative","plus"].includes(v);
   if(k==="step")return Number.isFinite(v)&&v>0&&v<=1000000;
   return Number.isInteger(v)&&(k==="cells"?v>=1&&v<=50:v>=0&&v<=8);
 }
+const unitFormats=["slash","in","parentheses","brackets"];
+
+function formatAxisTitle(label,symbol,unit,format){
+  const parts=[];
+  for(const [value,italic] of [[label,false],[symbol,true]]){
+    if(!value?.trim())continue;
+    if(parts.length)parts.push({text:" "});
+    const [base,...index]=value.trim().split("_");
+    parts.push({text:base,italic});
+    if(index.length)parts.push({text:index.join("_"),italic,subscript:true});
+  }
+  const u=unit?.trim();
+  if(!u)return parts;
+  let text=u;
+  if(parts.length){
+    switch(format){
+      case "in": text=" in "+u; break;
+      case "parentheses": text=" ("+u+")"; break;
+      case "brackets": text=" ["+u+"]"; break;
+      default: text=u.includes("/")?" / ("+u+")":" / "+u;
+    }
+  }
+  parts.push({text});
+  return parts;
+}
 function validate(s){
   if(!s||![1,2].includes(s.schemaVersion))throw Error("Diese Schemaversion wird nicht unterstützt.");
-  if(!names[s.template]||!Number.isInteger(s.template)||!["grid","frame","zero"].every(k=>typeof s[k]==="boolean")||!dirs.every(d=>s.axes?.[d]&&Object.keys(preset(3).axes[d]).every(k=>validValue(k,s.axes[d][k]))))throw Error("Die Datei enthält ungültige Diagrammeinstellungen.");
+  const axes={};
+  for(const d of dirs){
+    const axis=s.axes?.[d];
+    axes[d]={symbol:"",...axis};
+  }
+  if(!names[s.template]||!Number.isInteger(s.template)||!["grid","frame","zero"].every(k=>typeof s[k]==="boolean")||!dirs.every(d=>["active","title","symbol","unit","step","cells","decimals","sign"].every(k=>validValue(k,axes[d][k]))))throw Error("Die Datei enthält ungültige Diagrammeinstellungen.");
   if(s.schemaVersion===1)s={...s,schemaVersion:2,general:defaultGeneral(s.axes,s.template)};
   const minorGrid=s.minorGrid===undefined?defaultMinorGrid():s.minorGrid;
   if(typeof minorGrid?.enabled!=="boolean"||!gridDivisions.includes(minorGrid.divisions))throw Error("Die Hilfsgitter-Einstellungen sind ungültig.");
   const g=s.general;
   if(!g||(g.sizeUnit!==undefined&&!["px","mm"].includes(g.sizeUnit))||!validDimension(g.width)||!validDimension(g.height)||!validTitle(g.title)||typeof g.showTitle!=="boolean")throw Error("Die allgemeinen Diagrammeinstellungen sind ungültig.");
-  return {...s,minorGrid};
+  const unitFormat=g.unitFormat===undefined?"brackets":g.unitFormat;
+  if(!unitFormats.includes(unitFormat))throw Error("Das Format der Einheitenbeschriftung ist ungültig.");
+  return {...s,axes,minorGrid,general:{...g,unitFormat}};
 }
 function readDiagram(source){
   if(/<!DOCTYPE/i.test(source))throw Error("SVG-Dateien mit Dokumenttyp-Deklaration werden nicht unterstützt.");
@@ -108,10 +140,14 @@ function renderDiagram(s){
       label(tx+(dx?0:11),ty+(dx?22:5),val,dx?"middle":"start");
     }
     const title=label(x+(dx?-dx*7:0),y+(dx?(h===oy?-13:41):dy<0?-14:28),"",dx>0?"end":dx<0?"start":"middle");
-    const [base,...sub]=v.title.split("_");
-    add("tspan",{},base,title);
-    if(sub.length)add("tspan",{"baseline-shift":"sub","font-size":12},sub.join("_"),title);
-    if(v.unit)add("tspan",{}," ["+v.unit+"]",title);
+    title.setAttribute("data-achsentitel",d);
+    title.setAttribute("style","white-space: pre");
+    for(const part of formatAxisTitle(v.title,v.symbol,v.unit,s.general.unitFormat)){
+      const attrs={};
+      if(part.italic)attrs["font-style"]="italic";
+      if(part.subscript)Object.assign(attrs,{"baseline-shift":"sub","font-size":12});
+      add("tspan",attrs,part.text,title);
+    }
   });
   if(s.zero)label(ox+8,oy+20,"0","start");
   return svg;

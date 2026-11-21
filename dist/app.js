@@ -5,8 +5,8 @@ function icon(path){return '<svg aria-hidden="true" viewBox="0 0 24 24" fill="no
 document.querySelectorAll("[data-i]").forEach(i=>i.innerHTML=icon(paths[i.dataset.i]));
 let state=preset(3),expanded=new Set(["px"]);
 const captions=["Positive X-Achse","Negative X-Achse","Positive Y-Achse","Negative Y-Achse"];
-const labels={title:"Achsentitel",unit:"Einheit",step:"Schrittweite",cells:"Rasterfelder",decimals:"Dezimalstellen",sign:"Vorzeichen"};
-const errors={title:"Maximal 32 druckbare Zeichen.",unit:"Maximal 32 druckbare Zeichen.",step:"Zahl größer 0 bis 1.000.000 eingeben.",cells:"Ganze Zahl von 1 bis 50 eingeben.",decimals:"Ganze Zahl von 0 bis 8 eingeben."};
+const labels={title:"Größenname",symbol:"Formelzeichen",unit:"Einheit",step:"Schrittweite",cells:"Rasterfelder",decimals:"Dezimalstellen",sign:"Vorzeichen"};
+const errors={symbol:"Maximal 32 druckbare Zeichen.",title:"Maximal 32 druckbare Zeichen.",unit:"Maximal 32 druckbare Zeichen.",step:"Zahl größer 0 bis 1.000.000 eingeben.",cells:"Ganze Zahl von 1 bis 50 eingeben.",decimals:"Ganze Zahl von 0 bis 8 eingeben."};
 function fields(){
   $("axes").replaceChildren();
   dirs.forEach((d,i)=>{
@@ -34,8 +34,25 @@ const divisionsField=$("grid-divisions");
 for(const divisions of gridDivisions)divisionsField.add(new Option(divisions,divisions));
 divisionsField.oninput=update;
 $("minor-grid").oninput=update;
-function paint(){$("sheet").replaceChildren(renderDiagram(state))}
-for(const id of ["width","height","diagram-title","show-title"])$(id).oninput=update;
+function paint(){
+  const svg=renderDiagram(state);
+  $("sheet").replaceChildren(svg);
+  // Der Browser kann die tatsächliche Textbreite erst nach dem Einfügen messen.
+  const left=svg.querySelector('[data-achsentitel="nx"]');
+  const right=svg.querySelector('[data-achsentitel="px"]');
+  if(left?.textContent && right?.textContent){
+    const box=left.getBBox();
+    if(box.x+box.width+4>right.getBBox().x){
+      left.setAttribute("y",Number(left.getAttribute("y"))+ (state.axes.ny.active?24:-24));
+    }
+  }
+  const box=svg.getBBox(), view=svg.viewBox.baseVal;
+  const x=Math.min(view.x,box.x-4), y=Math.min(view.y,box.y-4);
+  const endX=Math.max(view.x+view.width,box.x+box.width+4);
+  const endY=Math.max(view.y+view.height,box.y+box.height+4);
+  svg.setAttribute("viewBox",[x,y,endX-x,endY-y].join(" "));
+}
+for(const id of ["width","height","diagram-title","show-title","unit-format"])$(id).oninput=update;
 function displayDimensions(general,unit){
   for(const k of ["width","height"]){
     $(k+"-unit").textContent=unit;
@@ -52,6 +69,7 @@ function update(){
   divisionsField.disabled=!next.minorGrid.enabled;
   const unit=$("size-unit").value;
   next.general.sizeUnit=unit;
+  next.general.unitFormat=$("unit-format").value;
   for(const k of ["width","height"]){
     const field=$(k), raw=field.value.trim().replace(",",".");
     const value=/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw)?Number(raw):NaN;
@@ -82,6 +100,7 @@ function update(){
 }
 function loadState(s){
   const unit=s.general.sizeUnit||"px";
+  $("unit-format").value=s.general.unitFormat;
   $("size-unit").value=unit;$("size-unit").disabled=false;
   displayDimensions(s.general,unit);
   for(const k of ["width","height"]){

@@ -12,3 +12,5 @@
 .nav-items button{display:block;width:100%;text-align:left;background:white;color:#243043;border:0;padding:10px 12px}
 .nav-items button:is(:hover,:focus-visible){background:#fff2c3;filter:none}
 @media(max-width:740px){header nav{flex-wrap:wrap}.nav-menu summary{padding:8px}.nav-items button{padding:10px}}
+
+.general .full:has(#unit-format){min-width:0}

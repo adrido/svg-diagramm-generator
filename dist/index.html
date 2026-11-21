@@ -18,6 +18,13 @@
 <label class="full">Maßeinheit<select id="size-unit"><option value="px">Pixel (px)</option><option value="mm">Millimeter (mm)</option></select></label>
 <label>Breite (<span id="width-unit">px</span>)<input id="width" inputmode="decimal" aria-describedby="width-error"><small class="error" id="width-error"></small></label>
 <label>Höhe (<span id="height-unit">px</span>)<input id="height" inputmode="decimal" aria-describedby="height-error"><small class="error" id="height-error"></small></label>
+<label class="full">Format der Einheitenbeschriftung
+<select id="unit-format">
+<option value="slash">Bruchstrich (DIN 461 / ISO 80000-1)</option>
+<option value="in">Sprachlich „in“ (DIN 461)</option>
+<option value="parentheses">Runde Klammern (international / NIST)</option>
+<option value="brackets">Eckige Klammern (ältere Schreibweise)</option>
+</select></label>
 <label class="full check"><input type="checkbox" id="show-title">Titel im Diagramm anzeigen</label>
 </div></details><div class="panelhead"><i data-i="sliders"></i><h2>Achseneinstellungen</h2></div><div id="axes"></div></aside>
 <section class="preview"><div class="panelhead"><i data-i="graph"></i><h2>Live-Vorschau</h2><span id="live">Aktuell</span></div><div class="stage"><div id="sheet"></div></div><div class="options" id="options"></div>

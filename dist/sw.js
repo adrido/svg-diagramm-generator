@@ -1,7 +1,7 @@
 "use strict";
 const base = self.registration.scope;
 const prefix = "svg-diagramm-generator:" + base + ":";
-const cacheName = prefix + "2";
+const cacheName = prefix + "4";
 const files = [
   "./index.html", "./style.css", "./diagram.js", "./app.js", "./manifest.webmanifest",
   "./icons/diagramm.svg", "./icons/diagramm-180.png", "./icons/diagramm-192.png", "./icons/diagramm-512.png"
