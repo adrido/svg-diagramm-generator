@@ -6,6 +6,8 @@ Für GitHub Pages den Inhalt von dist/ in den Stammordner eines GitHub-Repositor
 
 Die erste Ansicht verwendet die Diodenvorlage. Unter „Neu“ stehen +X / +Y, −X / −Y und Vier Richtungen zur Auswahl. „SVG öffnen“ öffnet eine lokale Datei oder lädt das Beispiel Diodenkennlinie. Ein Unterstrich im Titel leitet den Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
 
+Unter der Live-Vorschau lässt sich das Hilfsgitter unabhängig vom Raster einschalten. Es teilt jedes Rasterfeld auf beiden Achsen in 2, 4, 5 oder 10 gleiche Abschnitte. Bei neuen Diagrammen und beim Öffnen älterer SVGs ohne Hilfsgitter-Einstellungen ist es ausgeschaltet. Beim Speichern werden Sichtbarkeit und Unterteilung mitgesichert.
+
 SVG speichern exportiert das angezeigte Diagramm samt Einstellungen (schemaVersion 2). SVG öffnen liest ausschließlich den JSON-Eintrag im metadata-Element mit der ID svg-diagramm-generator-einstellungen. Dateien werden ausschließlich im Browser verarbeitet.
 
 Unter „Allgemeine Einstellungen“ legen Breite und Höhe die gesamte SVG-Zeichenfläche wahlweise in Pixeln oder Millimetern fest. Das Koordinatensystem wird proportional eingepasst. Der Diagrammname bestimmt den Dateinamen und kann als Überschrift angezeigt werden. Bei leerem Namen wird Koordinatensystem.svg verwendet. Dateien der Version 1 übernehmen ihre bisherigen Zeichenflächenmaße und erhalten einen ausgeblendeten Standardtitel. Beim Einheitenwechsel entsprechen 96 px genau 25,4 mm. Der Export enthält die gewählte Einheit direkt an width und height.

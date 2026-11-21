@@ -2,10 +2,12 @@
 const NS="http://www.w3.org/2000/svg", META="svg-diagramm-generator-einstellungen";
 const dirs=["px","nx","py","ny"], symbols=["+X","−X","+Y","−Y"];
 const names=["+X / +Y","−X / −Y","Vier Richtungen","Diodenkennlinie – Achsen"];
+const gridDivisions=[2,4,5,10];
+function defaultMinorGrid(){return {enabled:false,divisions:5}}
 function preset(n){
   const axes={};
   dirs.forEach((d,i)=>{axes[d]={active:n>=2 || (n===0?i%2===0:i%2===1),title:n===3?["U_F","U_R","I_F","I_R"][i]:i<2?"x":"y",unit:n===3?(i<2?"V":"mA"):"",step:n===3?[.1,2,.5,1][i]:1,cells:n===3?[9,8,5,5][i]:5,decimals:n===3&&i%2===0?1:0,sign:n===3||i%2===0?"amount":"negative"}});
-  return {schemaVersion:2,template:n,axes,grid:true,frame:true,zero:true,general:defaultGeneral(axes,n)};
+  return {schemaVersion:2,template:n,axes,grid:true,minorGrid:defaultMinorGrid(),frame:true,zero:true,general:defaultGeneral(axes,n)};
 }
 function geometry(a){
   const cell=56,count=d=>a[d].active?a[d].cells:0;
@@ -41,10 +43,12 @@ function validValue(k,v){
 function validate(s){
   if(!s||![1,2].includes(s.schemaVersion))throw Error("Diese Schemaversion wird nicht unterstützt.");
   if(!names[s.template]||!Number.isInteger(s.template)||!["grid","frame","zero"].every(k=>typeof s[k]==="boolean")||!dirs.every(d=>s.axes?.[d]&&Object.keys(preset(3).axes[d]).every(k=>validValue(k,s.axes[d][k]))))throw Error("Die Datei enthält ungültige Diagrammeinstellungen.");
-  if(s.schemaVersion===1)return {...s,schemaVersion:2,general:defaultGeneral(s.axes,s.template)};
+  if(s.schemaVersion===1)s={...s,schemaVersion:2,general:defaultGeneral(s.axes,s.template)};
+  const minorGrid=s.minorGrid===undefined?defaultMinorGrid():s.minorGrid;
+  if(typeof minorGrid?.enabled!=="boolean"||!gridDivisions.includes(minorGrid.divisions))throw Error("Die Hilfsgitter-Einstellungen sind ungültig.");
   const g=s.general;
   if(!g||(g.sizeUnit!==undefined&&!["px","mm"].includes(g.sizeUnit))||!validDimension(g.width)||!validDimension(g.height)||!validTitle(g.title)||typeof g.showTitle!=="boolean")throw Error("Die allgemeinen Diagrammeinstellungen sind ungültig.");
-  return s;
+  return {...s,minorGrid};
 }
 function readDiagram(source){
   if(/<!DOCTYPE/i.test(source))throw Error("SVG-Dateien mit Dokumenttyp-Deklaration werden nicht unterstützt.");
@@ -80,6 +84,16 @@ function renderDiagram(s){
   add("metadata",{id:META},JSON.stringify(s));
   function line(x1,y1,x2,y2,color,width){add("line",{x1,y1,x2,y2,stroke:color,"stroke-width":width})}
   function label(x,y,value,anchor="middle"){return add("text",{x,y,"text-anchor":anchor},value)}
+  if(s.minorGrid.enabled && w>0 && h>0){
+    const segments=[];
+    const divisions=s.minorGrid.divisions;
+    for(let part=1;part<divisions;part++){
+      const offset=cell*part/divisions;
+      for(let x=0;x<w;x+=cell)segments.push(`M ${x+offset} 0 v ${h}`);
+      for(let y=0;y<h;y+=cell)segments.push(`M 0 ${y+offset} h ${w}`);
+    }
+    add("path",{d:segments.join(" "),fill:"none",stroke:"#dde2e8","stroke-width":0.7});
+  }
   if(s.grid){for(let x=0;x<=w;x+=cell)line(x,0,x,h,"#c1c8d1",1);for(let y=0;y<=h;y+=cell)line(0,y,w,y,"#c1c8d1",1)}
   if(s.frame)add("rect",{x:0,y:0,width:w,height:h,fill:"none",stroke:"#929dab"});
   dirs.forEach((d,i)=>{

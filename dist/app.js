@@ -30,6 +30,10 @@ function fields(){
 for(const [k,label] of [["grid","Raster"],["frame","Rahmen"],["zero","Nullbeschriftung"]]){
   const wrap=document.createElement("label"),f=document.createElement("input");f.type="checkbox";f.id=k;f.oninput=update;wrap.append(f,label);$("options").append(wrap);
 }
+const divisionsField=$("grid-divisions");
+for(const divisions of gridDivisions)divisionsField.add(new Option(divisions,divisions));
+divisionsField.oninput=update;
+$("minor-grid").oninput=update;
 function paint(){$("sheet").replaceChildren(renderDiagram(state))}
 for(const id of ["width","height","diagram-title","show-title"])$(id).oninput=update;
 function displayDimensions(general,unit){
@@ -44,6 +48,8 @@ $("size-unit").onchange=()=>{
 };
 function update(){
   const next=structuredClone(state);let ok=true;
+  next.minorGrid={enabled:$("minor-grid").checked,divisions:Number(divisionsField.value)};
+  divisionsField.disabled=!next.minorGrid.enabled;
   const unit=$("size-unit").value;
   next.general.sizeUnit=unit;
   for(const k of ["width","height"]){
@@ -83,6 +89,9 @@ function loadState(s){
   }
   $("diagram-title").value=s.general.title;$("show-title").checked=s.general.showTitle;
   $("diagram-title").removeAttribute("aria-invalid");$("title-error").textContent="";
+  $("minor-grid").checked=s.minorGrid.enabled;
+  divisionsField.value=s.minorGrid.divisions;
+  divisionsField.disabled=!s.minorGrid.enabled;
   state=s;fields();for(const k of ["grid","frame","zero"])$(k).checked=s[k];
   $("save").disabled=false;$("live").textContent="Aktuell";$("message").textContent="";paint();
 }
