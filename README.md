@@ -9,3 +9,9 @@ Die erste Ansicht verwendet die Diodenvorlage. Unter „Neu“ stehen +X / +Y, �
 SVG speichern exportiert das angezeigte Diagramm samt Einstellungen (schemaVersion 2). SVG öffnen liest ausschließlich den JSON-Eintrag im metadata-Element mit der ID svg-diagramm-generator-einstellungen. Dateien werden ausschließlich im Browser verarbeitet.
 
 Unter „Allgemeine Einstellungen“ legen Breite und Höhe die gesamte SVG-Zeichenfläche wahlweise in Pixeln oder Millimetern fest. Das Koordinatensystem wird proportional eingepasst. Der Diagrammname bestimmt den Dateinamen und kann als Überschrift angezeigt werden. Bei leerem Namen wird Koordinatensystem.svg verwendet. Dateien der Version 1 übernehmen ihre bisherigen Zeichenflächenmaße und erhalten einen ausgeblendeten Standardtitel. Beim Einheitenwechsel entsprechen 96 px genau 25,4 mm. Der Export enthält die gewählte Einheit direkt an width und height.
+
+## Installation als App
+
+Den Generator über HTTPS oder lokal über localhost öffnen. In einem Browser mit PWA-Unterstützung die Installationsfunktion im Browsermenü wählen. Auf dem iPhone in Safari „Teilen“ und „Zum Home-Bildschirm“ wählen. Nach dem ersten abgeschlossenen Laden steht der Generator auch offline zur Verfügung. Zum Testen den Browser offline schalten und die installierte App erneut öffnen.
+
+Bei Änderungen an den zwischengespeicherten Dateien die Versionsnummer in sw.js erhöhen, damit die Offline-Kopie aktualisiert wird.

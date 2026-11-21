@@ -3,7 +3,6 @@ const $=id=>document.getElementById(id);
 const paths={plus:"M12 5v14M5 12h14",folder:"M3 7V5h7l2 3h9v3M3 9v11h16l3-10H7l-3 9",save:"M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5",lock:"M7 10V8a5 5 0 0 1 10 0v2M5 10h14v11H5z",sliders:"M3 7h7m4 0h7M3 17h12m4 0h2M10 4v6m5 4v6",graph:"M3 3v18h18M6 15l5-6 4 3 6-8"};
 function icon(path){return '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="'+path+'"/></svg>'}
 document.querySelectorAll("[data-i]").forEach(i=>i.innerHTML=icon(paths[i.dataset.i]));
-document.querySelector(".logo").innerHTML=icon("M6 2v20M2 18h20M3 14h6m-6-5h6m3 6v6m5-6v6M9 14l4-5 3 2 5-7");
 let state=preset(3),expanded=new Set(["px"]);
 const captions=["Positive X-Achse","Negative X-Achse","Positive Y-Achse","Negative Y-Achse"];
 const labels={title:"Achsentitel",unit:"Einheit",step:"Schrittweite",cells:"Rasterfelder",decimals:"Dezimalstellen",sign:"Vorzeichen"};
@@ -137,3 +136,8 @@ $("save").onclick=()=>{
   link.href=url;link.download=downloadName(state.general.title);document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
 };
 loadState(state);
+if ("serviceWorker" in navigator && ["https:", "http:"].includes(location.protocol)) {
+  navigator.serviceWorker.register("./sw.js").catch(error => {
+    console.warn("Der Offline-Modus konnte nicht aktiviert werden.", error);
+  });
+}
