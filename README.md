@@ -2,8 +2,6 @@
 
 Statische, deutschsprachige Browser-App. Zum lokalen Start dist/index.html in einem aktuellen Browser öffnen. Alternativ im Projektordner `python3 -m http.server 8000 --directory dist` starten und http://localhost:8000 öffnen. Es gibt keine Abhängigkeiten und keinen Build-Schritt.
 
-Für GitHub Pages den Inhalt von dist/ in den Stammordner eines GitHub-Repositorys kopieren. Unter Settings → Pages → Deploy from a branch den Branch und /(root) wählen. Alle Ressourcen verwenden relative Pfade. Für eine Veröffentlichung unter MIT eine LICENSE mit dem MIT-Lizenztext und dem eigenen Copyright-Vermerk ergänzen.
-
 Die erste Ansicht verwendet die Diodenvorlage. Unter „Neu“ stehen +X / +Y, −X / −Y und Vier Richtungen zur Auswahl. Über „SVG öffnen“ lassen sich lokale Dateien, SVG-Quelltext aus der Zwischenablage und das Beispiel Diodenkennlinie öffnen. Eine einzelne SVG-Datei kann auch auf die Live-Vorschau gezogen werden. Ein Unterstrich im Größennamen oder Formelzeichen leitet einen Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
 
 Mit „Entwurf auf diesem Gerät merken“ in der Kopfzeile lässt sich die lokale Entwurfsspeicherung einschalten. Die App merkt sich auch unfertige Eingaben und stellt den letzten Entwurf beim nächsten Öffnen im selben Browserprofil wieder her. Ausschalten löscht die lokale Sicherung. Für eine dauerhafte Kopie „SVG speichern“ verwenden.
@@ -41,10 +39,22 @@ Beim optimierten Export müssen die Metadaten erhalten bleiben. Entfernt ein Wer
 
 ### Metadatentests
 
-Im Projektstamm `python3 -m http.server 8000` starten und `http://localhost:8000/tests/metadata.html` öffnen. Die Tests laufen automatisch und melden das Ergebnis auf der Seite. Sie prüfen alle vier Beschriftungsformate, XML-Maskierung, Präfixwechsel, die Fehlerfälle beim Dateiöffnen und den Erhalt des bisherigen Editorzustands. Die Beispieldatei unter `tests/fixtures/` wurde mit Inkscape 1.2.2 als Inkscape-SVG gespeichert.
+Im Projektstamm `python3 -m http.server 8000` starten und im Browser [die Metadatentests](http://localhost:8000/tests/metadata.html) öffnen. Die Seite lädt den Editor und eine mit Inkscape 1.2.2 gespeicherte SVG-Datei. Die Prüfungen starten automatisch. Bei Erfolg zeigt die Seite die Anzahl und die Namen der bestandenen Prüfungen an. Bei einem Fehler nennt sie die erste fehlgeschlagene Prüfung oder die ausgelöste Fehlermeldung.
+
+Die Tests prüfen unter anderem, ob beim Export und erneuten Import alle vier Beschriftungsformate sowie Sonderzeichen erhalten bleiben. Sie prüfen auch, ob der Import geänderte Namespace-Präfixe akzeptiert und ob bei ungültigen Dateien sowohl das geöffnete Diagramm als auch unfertige Eingaben erhalten bleiben.
 
 ## Installation als App
 
-Den Generator über HTTPS oder lokal über localhost öffnen. In einem Browser mit PWA-Unterstützung die Installationsfunktion im Browsermenü wählen. Auf dem iPhone in Safari „Teilen“ und „Zum Home-Bildschirm“ wählen. Nach dem ersten abgeschlossenen Laden steht der Generator auch offline zur Verfügung. Zum Testen den Browser offline schalten und die installierte App erneut öffnen.
+Den Generator über HTTPS oder lokal über localhost öffnen. In einem Browser mit PWA-Unterstützung die Installationsfunktion im Browsermenü wählen. Auf dem iPhone in Safari „Teilen“ und „Zum Home-Bildschirm“ wählen.
+
+### Offline-Neuladen prüfen
+
+1. Den Generator online öffnen. Läuft der lokale Server wie für die Metadatentests im Projektstamm, ist die App unter [localhost:8000/dist/](http://localhost:8000/dist/) erreichbar.
+2. In den Entwicklerwerkzeugen prüfen, ob der Service Worker für die App aktiviert ist. Dann die Netzwerkverbindung im Browser auf „Offline“ stellen und die Seite normal neu laden.
+3. Die Live-Vorschau muss wieder erscheinen. Eine Achsenbeschriftung ändern und prüfen, ob die Vorschau den neuen Text anzeigt. Anschließend die Netzwerkverbindung wieder einschalten.
 
 Bei Änderungen an den zwischengespeicherten Dateien die Versionsnummer in sw.js erhöhen, damit die Offline-Kopie aktualisiert wird.
+
+## Lizenz
+
+Der SVG-Diagramm-Generator steht unter der [MIT-Lizenz](LICENSE).
