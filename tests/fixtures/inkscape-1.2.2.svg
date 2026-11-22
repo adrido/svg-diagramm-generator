@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="241.432291666667mm"
+   height="171.979166666667mm"
+   viewBox="-126 -85 1204 690"
+   font-family="Arial, sans-serif"
+   font-size="16"
+   fill="#253043"
+   version="1.1"
+   id="svg228"
+   sodipodi:docname="generator.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:sdg="https://github.com/adrido/svg-diagramm-generator/ns/diagram/1">
+  <defs
+     id="defs232" />
+  <sodipodi:namedview
+     id="namedview230"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm" />
+  <title
+     id="title2">Mäßig &amp; &lt;heiß&gt; &quot;Δ&quot; µΩ° &amp;#x20; &amp;amp; 🧭</title>
+  <text
+     x="476"
+     y="-55"
+     text-anchor="middle"
+     font-size="24"
+     font-weight="bold"
+     id="text4">Mäßig &amp; &lt;heiß&gt; &quot;Δ&quot; µΩ° &amp;#x20; &amp;amp; 🧭</text>
+  <metadata
+     id="metadata6">
+    <sdg:document
+       version="1"
+       encoding="application/json">{
+  &quot;schemaVersion&quot;: 1,
+  &quot;template&quot;: 3,
+  &quot;axes&quot;: {
+    &quot;px&quot;: {
+      &quot;active&quot;: true,
+      &quot;title&quot;: &quot;Wert &lt; 0&quot;,
+      &quot;symbol&quot;: &quot;Δ_0&quot;,
+      &quot;unit&quot;: &quot;µΩ / °&quot;,
+      &quot;step&quot;: 0.1,
+      &quot;cells&quot;: 9,
+      &quot;decimals&quot;: 1,
+      &quot;sign&quot;: &quot;amount&quot;
+    },
+    &quot;nx&quot;: {
+      &quot;active&quot;: true,
+      &quot;title&quot;: &quot;Wert &lt; 1&quot;,
+      &quot;symbol&quot;: &quot;Δ_1&quot;,
+      &quot;unit&quot;: &quot;µΩ / °&quot;,
+      &quot;step&quot;: 2,
+      &quot;cells&quot;: 8,
+      &quot;decimals&quot;: 0,
+      &quot;sign&quot;: &quot;amount&quot;
+    },
+    &quot;py&quot;: {
+      &quot;active&quot;: true,
+      &quot;title&quot;: &quot;Wert &lt; 2&quot;,
+      &quot;symbol&quot;: &quot;Δ_2&quot;,
+      &quot;unit&quot;: &quot;µΩ / °&quot;,
+      &quot;step&quot;: 0.5,
+      &quot;cells&quot;: 5,
+      &quot;decimals&quot;: 1,
+      &quot;sign&quot;: &quot;amount&quot;
+    },
+    &quot;ny&quot;: {
+      &quot;active&quot;: true,
+      &quot;title&quot;: &quot;Wert &lt; 3&quot;,
+      &quot;symbol&quot;: &quot;Δ_3&quot;,
+      &quot;unit&quot;: &quot;µΩ / °&quot;,
+      &quot;step&quot;: 1,
+      &quot;cells&quot;: 5,
+      &quot;decimals&quot;: 0,
+      &quot;sign&quot;: &quot;amount&quot;
+    }
+  },
+  &quot;grid&quot;: true,
+  &quot;minorGrid&quot;: {
+    &quot;enabled&quot;: true,
+    &quot;divisions&quot;: 10
+  },
+  &quot;frame&quot;: true,
+  &quot;zero&quot;: true,
+  &quot;general&quot;: {
+    &quot;width&quot;: 912.5,
+    &quot;height&quot;: 650,
+    &quot;title&quot;: &quot;Mäßig &amp; &lt;heiß&gt; \&quot;Δ\&quot; µΩ° &amp;#x20; &amp;amp; 🧭&quot;,
+    &quot;showTitle&quot;: true,
+    &quot;sizeUnit&quot;: &quot;mm&quot;,
+    &quot;unitFormat&quot;: &quot;slash&quot;
+  }
+}</sdg:document>
+  </metadata>
+  <path
+     d="M 5.6 0 v 560 M 61.6 0 v 560 M 117.6 0 v 560 M 173.6 0 v 560 M 229.6 0 v 560 M 285.6 0 v 560 M 341.6 0 v 560 M 397.6 0 v 560 M 453.6 0 v 560 M 509.6 0 v 560 M 565.6 0 v 560 M 621.6 0 v 560 M 677.6 0 v 560 M 733.6 0 v 560 M 789.6 0 v 560 M 845.6 0 v 560 M 901.6 0 v 560 M 0 5.6 h 952 M 0 61.6 h 952 M 0 117.6 h 952 M 0 173.6 h 952 M 0 229.6 h 952 M 0 285.6 h 952 M 0 341.6 h 952 M 0 397.6 h 952 M 0 453.6 h 952 M 0 509.6 h 952 M 11.2 0 v 560 M 67.2 0 v 560 M 123.2 0 v 560 M 179.2 0 v 560 M 235.2 0 v 560 M 291.2 0 v 560 M 347.2 0 v 560 M 403.2 0 v 560 M 459.2 0 v 560 M 515.2 0 v 560 M 571.2 0 v 560 M 627.2 0 v 560 M 683.2 0 v 560 M 739.2 0 v 560 M 795.2 0 v 560 M 851.2 0 v 560 M 907.2 0 v 560 M 0 11.2 h 952 M 0 67.2 h 952 M 0 123.2 h 952 M 0 179.2 h 952 M 0 235.2 h 952 M 0 291.2 h 952 M 0 347.2 h 952 M 0 403.2 h 952 M 0 459.2 h 952 M 0 515.2 h 952 M 16.8 0 v 560 M 72.8 0 v 560 M 128.8 0 v 560 M 184.8 0 v 560 M 240.8 0 v 560 M 296.8 0 v 560 M 352.8 0 v 560 M 408.8 0 v 560 M 464.8 0 v 560 M 520.8 0 v 560 M 576.8 0 v 560 M 632.8 0 v 560 M 688.8 0 v 560 M 744.8 0 v 560 M 800.8 0 v 560 M 856.8 0 v 560 M 912.8 0 v 560 M 0 16.8 h 952 M 0 72.8 h 952 M 0 128.8 h 952 M 0 184.8 h 952 M 0 240.8 h 952 M 0 296.8 h 952 M 0 352.8 h 952 M 0 408.8 h 952 M 0 464.8 h 952 M 0 520.8 h 952 M 22.4 0 v 560 M 78.4 0 v 560 M 134.4 0 v 560 M 190.4 0 v 560 M 246.4 0 v 560 M 302.4 0 v 560 M 358.4 0 v 560 M 414.4 0 v 560 M 470.4 0 v 560 M 526.4 0 v 560 M 582.4 0 v 560 M 638.4 0 v 560 M 694.4 0 v 560 M 750.4 0 v 560 M 806.4 0 v 560 M 862.4 0 v 560 M 918.4 0 v 560 M 0 22.4 h 952 M 0 78.4 h 952 M 0 134.4 h 952 M 0 190.4 h 952 M 0 246.4 h 952 M 0 302.4 h 952 M 0 358.4 h 952 M 0 414.4 h 952 M 0 470.4 h 952 M 0 526.4 h 952 M 28 0 v 560 M 84 0 v 560 M 140 0 v 560 M 196 0 v 560 M 252 0 v 560 M 308 0 v 560 M 364 0 v 560 M 420 0 v 560 M 476 0 v 560 M 532 0 v 560 M 588 0 v 560 M 644 0 v 560 M 700 0 v 560 M 756 0 v 560 M 812 0 v 560 M 868 0 v 560 M 924 0 v 560 M 0 28 h 952 M 0 84 h 952 M 0 140 h 952 M 0 196 h 952 M 0 252 h 952 M 0 308 h 952 M 0 364 h 952 M 0 420 h 952 M 0 476 h 952 M 0 532 h 952 M 33.6 0 v 560 M 89.6 0 v 560 M 145.6 0 v 560 M 201.6 0 v 560 M 257.6 0 v 560 M 313.6 0 v 560 M 369.6 0 v 560 M 425.6 0 v 560 M 481.6 0 v 560 M 537.6 0 v 560 M 593.6 0 v 560 M 649.6 0 v 560 M 705.6 0 v 560 M 761.6 0 v 560 M 817.6 0 v 560 M 873.6 0 v 560 M 929.6 0 v 560 M 0 33.6 h 952 M 0 89.6 h 952 M 0 145.6 h 952 M 0 201.6 h 952 M 0 257.6 h 952 M 0 313.6 h 952 M 0 369.6 h 952 M 0 425.6 h 952 M 0 481.6 h 952 M 0 537.6 h 952 M 39.2 0 v 560 M 95.2 0 v 560 M 151.2 0 v 560 M 207.2 0 v 560 M 263.2 0 v 560 M 319.2 0 v 560 M 375.2 0 v 560 M 431.2 0 v 560 M 487.2 0 v 560 M 543.2 0 v 560 M 599.2 0 v 560 M 655.2 0 v 560 M 711.2 0 v 560 M 767.2 0 v 560 M 823.2 0 v 560 M 879.2 0 v 560 M 935.2 0 v 560 M 0 39.2 h 952 M 0 95.2 h 952 M 0 151.2 h 952 M 0 207.2 h 952 M 0 263.2 h 952 M 0 319.2 h 952 M 0 375.2 h 952 M 0 431.2 h 952 M 0 487.2 h 952 M 0 543.2 h 952 M 44.8 0 v 560 M 100.8 0 v 560 M 156.8 0 v 560 M 212.8 0 v 560 M 268.8 0 v 560 M 324.8 0 v 560 M 380.8 0 v 560 M 436.8 0 v 560 M 492.8 0 v 560 M 548.8 0 v 560 M 604.8 0 v 560 M 660.8 0 v 560 M 716.8 0 v 560 M 772.8 0 v 560 M 828.8 0 v 560 M 884.8 0 v 560 M 940.8 0 v 560 M 0 44.8 h 952 M 0 100.8 h 952 M 0 156.8 h 952 M 0 212.8 h 952 M 0 268.8 h 952 M 0 324.8 h 952 M 0 380.8 h 952 M 0 436.8 h 952 M 0 492.8 h 952 M 0 548.8 h 952 M 50.4 0 v 560 M 106.4 0 v 560 M 162.4 0 v 560 M 218.4 0 v 560 M 274.4 0 v 560 M 330.4 0 v 560 M 386.4 0 v 560 M 442.4 0 v 560 M 498.4 0 v 560 M 554.4 0 v 560 M 610.4 0 v 560 M 666.4 0 v 560 M 722.4 0 v 560 M 778.4 0 v 560 M 834.4 0 v 560 M 890.4 0 v 560 M 946.4 0 v 560 M 0 50.4 h 952 M 0 106.4 h 952 M 0 162.4 h 952 M 0 218.4 h 952 M 0 274.4 h 952 M 0 330.4 h 952 M 0 386.4 h 952 M 0 442.4 h 952 M 0 498.4 h 952 M 0 554.4 h 952"
+     fill="none"
+     stroke="#dde2e8"
+     stroke-width="0.7"
+     id="path8" />
+  <line
+     x1="0"
+     y1="0"
+     x2="0"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line10" />
+  <line
+     x1="56"
+     y1="0"
+     x2="56"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line12" />
+  <line
+     x1="112"
+     y1="0"
+     x2="112"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line14" />
+  <line
+     x1="168"
+     y1="0"
+     x2="168"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line16" />
+  <line
+     x1="224"
+     y1="0"
+     x2="224"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line18" />
+  <line
+     x1="280"
+     y1="0"
+     x2="280"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line20" />
+  <line
+     x1="336"
+     y1="0"
+     x2="336"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line22" />
+  <line
+     x1="392"
+     y1="0"
+     x2="392"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line24" />
+  <line
+     x1="448"
+     y1="0"
+     x2="448"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line26" />
+  <line
+     x1="504"
+     y1="0"
+     x2="504"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line28" />
+  <line
+     x1="560"
+     y1="0"
+     x2="560"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line30" />
+  <line
+     x1="616"
+     y1="0"
+     x2="616"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line32" />
+  <line
+     x1="672"
+     y1="0"
+     x2="672"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line34" />
+  <line
+     x1="728"
+     y1="0"
+     x2="728"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line36" />
+  <line
+     x1="784"
+     y1="0"
+     x2="784"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line38" />
+  <line
+     x1="840"
+     y1="0"
+     x2="840"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line40" />
+  <line
+     x1="896"
+     y1="0"
+     x2="896"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line42" />
+  <line
+     x1="952"
+     y1="0"
+     x2="952"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line44" />
+  <line
+     x1="0"
+     y1="0"
+     x2="952"
+     y2="0"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line46" />
+  <line
+     x1="0"
+     y1="56"
+     x2="952"
+     y2="56"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line48" />
+  <line
+     x1="0"
+     y1="112"
+     x2="952"
+     y2="112"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line50" />
+  <line
+     x1="0"
+     y1="168"
+     x2="952"
+     y2="168"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line52" />
+  <line
+     x1="0"
+     y1="224"
+     x2="952"
+     y2="224"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line54" />
+  <line
+     x1="0"
+     y1="280"
+     x2="952"
+     y2="280"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line56" />
+  <line
+     x1="0"
+     y1="336"
+     x2="952"
+     y2="336"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line58" />
+  <line
+     x1="0"
+     y1="392"
+     x2="952"
+     y2="392"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line60" />
+  <line
+     x1="0"
+     y1="448"
+     x2="952"
+     y2="448"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line62" />
+  <line
+     x1="0"
+     y1="504"
+     x2="952"
+     y2="504"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line64" />
+  <line
+     x1="0"
+     y1="560"
+     x2="952"
+     y2="560"
+     stroke="#c1c8d1"
+     stroke-width="1"
+     id="line66" />
+  <rect
+     x="0"
+     y="0"
+     width="952"
+     height="560"
+     fill="none"
+     stroke="#929dab"
+     id="rect68" />
+  <line
+     x1="448"
+     y1="280"
+     x2="952"
+     y2="280"
+     stroke="#273145"
+     stroke-width="2.2"
+     id="line70" />
+  <path
+     d="M 942 285 L 952 280 L 942 275"
+     stroke="#273145"
+     stroke-width="2.4"
+     fill="none"
+     id="path72" />
+  <line
+     x1="504"
+     y1="280"
+     x2="504"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line74" />
+  <text
+     x="504"
+     y="302"
+     text-anchor="middle"
+     id="text76">0,1</text>
+  <line
+     x1="560"
+     y1="280"
+     x2="560"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line78" />
+  <text
+     x="560"
+     y="302"
+     text-anchor="middle"
+     id="text80">0,2</text>
+  <line
+     x1="616"
+     y1="280"
+     x2="616"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line82" />
+  <text
+     x="616"
+     y="302"
+     text-anchor="middle"
+     id="text84">0,3</text>
+  <line
+     x1="672"
+     y1="280"
+     x2="672"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line86" />
+  <text
+     x="672"
+     y="302"
+     text-anchor="middle"
+     id="text88">0,4</text>
+  <line
+     x1="728"
+     y1="280"
+     x2="728"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line90" />
+  <text
+     x="728"
+     y="302"
+     text-anchor="middle"
+     id="text92">0,5</text>
+  <line
+     x1="784"
+     y1="280"
+     x2="784"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line94" />
+  <text
+     x="784"
+     y="302"
+     text-anchor="middle"
+     id="text96">0,6</text>
+  <line
+     x1="840"
+     y1="280"
+     x2="840"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line98" />
+  <text
+     x="840"
+     y="302"
+     text-anchor="middle"
+     id="text100">0,7</text>
+  <line
+     x1="896"
+     y1="280"
+     x2="896"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line102" />
+  <text
+     x="896"
+     y="302"
+     text-anchor="middle"
+     id="text104">0,8</text>
+  <text
+     x="945"
+     y="321"
+     text-anchor="end"
+     data-achsentitel="px"
+     style="white-space: pre"
+     id="text116"><tspan
+       id="tspan106">Wert &lt; 0</tspan><tspan
+       id="tspan108" /><tspan
+       font-style="italic"
+       id="tspan110">Δ</tspan><tspan
+       font-style="italic"
+       baseline-shift="sub"
+       font-size="12"
+       id="tspan112">0</tspan><tspan
+       id="tspan114"> / (µΩ / °)</tspan></text>
+  <line
+     x1="448"
+     y1="280"
+     x2="0"
+     y2="280"
+     stroke="#273145"
+     stroke-width="2.2"
+     id="line118" />
+  <path
+     d="M 10 275 L 0 280 L 10 285"
+     stroke="#273145"
+     stroke-width="2.4"
+     fill="none"
+     id="path120" />
+  <line
+     x1="392"
+     y1="280"
+     x2="392"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line122" />
+  <text
+     x="392"
+     y="302"
+     text-anchor="middle"
+     id="text124">2</text>
+  <line
+     x1="336"
+     y1="280"
+     x2="336"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line126" />
+  <text
+     x="336"
+     y="302"
+     text-anchor="middle"
+     id="text128">4</text>
+  <line
+     x1="280"
+     y1="280"
+     x2="280"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line130" />
+  <text
+     x="280"
+     y="302"
+     text-anchor="middle"
+     id="text132">6</text>
+  <line
+     x1="224"
+     y1="280"
+     x2="224"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line134" />
+  <text
+     x="224"
+     y="302"
+     text-anchor="middle"
+     id="text136">8</text>
+  <line
+     x1="168"
+     y1="280"
+     x2="168"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line138" />
+  <text
+     x="168"
+     y="302"
+     text-anchor="middle"
+     id="text140">10</text>
+  <line
+     x1="112"
+     y1="280"
+     x2="112"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line142" />
+  <text
+     x="112"
+     y="302"
+     text-anchor="middle"
+     id="text144">12</text>
+  <line
+     x1="56"
+     y1="280"
+     x2="56"
+     y2="286"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line146" />
+  <text
+     x="56"
+     y="302"
+     text-anchor="middle"
+     id="text148">14</text>
+  <text
+     x="7"
+     y="321"
+     text-anchor="start"
+     data-achsentitel="nx"
+     style="white-space: pre"
+     id="text160"><tspan
+       id="tspan150">Wert &lt; 1</tspan><tspan
+       id="tspan152" /><tspan
+       font-style="italic"
+       id="tspan154">Δ</tspan><tspan
+       font-style="italic"
+       baseline-shift="sub"
+       font-size="12"
+       id="tspan156">1</tspan><tspan
+       id="tspan158"> / (µΩ / °)</tspan></text>
+  <line
+     x1="448"
+     y1="280"
+     x2="448"
+     y2="0"
+     stroke="#273145"
+     stroke-width="2.2"
+     id="line162" />
+  <path
+     d="M 443 10 L 448 0 L 453 10"
+     stroke="#273145"
+     stroke-width="2.4"
+     fill="none"
+     id="path164" />
+  <line
+     x1="448"
+     y1="224"
+     x2="454"
+     y2="224"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line166" />
+  <text
+     x="459"
+     y="229"
+     text-anchor="start"
+     id="text168">0,5</text>
+  <line
+     x1="448"
+     y1="168"
+     x2="454"
+     y2="168"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line170" />
+  <text
+     x="459"
+     y="173"
+     text-anchor="start"
+     id="text172">1,0</text>
+  <line
+     x1="448"
+     y1="112"
+     x2="454"
+     y2="112"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line174" />
+  <text
+     x="459"
+     y="117"
+     text-anchor="start"
+     id="text176">1,5</text>
+  <line
+     x1="448"
+     y1="56"
+     x2="454"
+     y2="56"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line178" />
+  <text
+     x="459"
+     y="61"
+     text-anchor="start"
+     id="text180">2,0</text>
+  <text
+     x="448"
+     y="-14"
+     text-anchor="middle"
+     data-achsentitel="py"
+     style="white-space: pre"
+     id="text192"><tspan
+       id="tspan182">Wert &lt; 2</tspan><tspan
+       id="tspan184" /><tspan
+       font-style="italic"
+       id="tspan186">Δ</tspan><tspan
+       font-style="italic"
+       baseline-shift="sub"
+       font-size="12"
+       id="tspan188">2</tspan><tspan
+       id="tspan190"> / (µΩ / °)</tspan></text>
+  <line
+     x1="448"
+     y1="280"
+     x2="448"
+     y2="560"
+     stroke="#273145"
+     stroke-width="2.2"
+     id="line194" />
+  <path
+     d="M 453 550 L 448 560 L 443 550"
+     stroke="#273145"
+     stroke-width="2.4"
+     fill="none"
+     id="path196" />
+  <line
+     x1="448"
+     y1="336"
+     x2="454"
+     y2="336"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line198" />
+  <text
+     x="459"
+     y="341"
+     text-anchor="start"
+     id="text200">1</text>
+  <line
+     x1="448"
+     y1="392"
+     x2="454"
+     y2="392"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line202" />
+  <text
+     x="459"
+     y="397"
+     text-anchor="start"
+     id="text204">2</text>
+  <line
+     x1="448"
+     y1="448"
+     x2="454"
+     y2="448"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line206" />
+  <text
+     x="459"
+     y="453"
+     text-anchor="start"
+     id="text208">3</text>
+  <line
+     x1="448"
+     y1="504"
+     x2="454"
+     y2="504"
+     stroke="#273145"
+     stroke-width="1.8"
+     id="line210" />
+  <text
+     x="459"
+     y="509"
+     text-anchor="start"
+     id="text212">4</text>
+  <text
+     x="448"
+     y="588"
+     text-anchor="middle"
+     data-achsentitel="ny"
+     style="white-space: pre"
+     id="text224"><tspan
+       id="tspan214">Wert &lt; 3</tspan><tspan
+       id="tspan216" /><tspan
+       font-style="italic"
+       id="tspan218">Δ</tspan><tspan
+       font-style="italic"
+       baseline-shift="sub"
+       font-size="12"
+       id="tspan220">3</tspan><tspan
+       id="tspan222"> / (µΩ / °)</tspan></text>
+  <text
+     x="456"
+     y="300"
+     text-anchor="start"
+     id="text226">0</text>
+</svg>

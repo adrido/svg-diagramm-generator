@@ -1,5 +1,8 @@
 "use strict";
-const NS="http://www.w3.org/2000/svg", META="svg-diagramm-generator-einstellungen";
+const NS="http://www.w3.org/2000/svg";
+const diagramNamespace="https://github.com/adrido/svg-diagramm-generator/ns/diagram/1";
+const currentSchemaVersion=1;
+const maxSvgBytes=2*1024*1024, maxMetadataLength=64*1024;
 const dirs=["px","nx","py","ny"], symbols=["+X","−X","+Y","−Y"];
 const names=["+X / +Y","−X / −Y","Vier Richtungen","Diodenkennlinie – Achsen"];
 const gridDivisions=[2,4,5,10];
@@ -7,7 +10,7 @@ function defaultMinorGrid(){return {enabled:false,divisions:5}}
 function preset(n){
   const axes={};
   dirs.forEach((d,i)=>{axes[d]={active:n>=2 || (n===0?i%2===0:i%2===1),title:n===3?"":(i<2?"x":"y"),symbol:n===3?["U_F","U_R","I_F","I_R"][i]:"",unit:n===3?(i<2?"V":"mA"):"",step:n===3?[.1,2,.5,1][i]:1,cells:n===3?[9,8,5,5][i]:5,decimals:n===3&&i%2===0?1:0,sign:n===3||i%2===0?"amount":"negative"}});
-  return {schemaVersion:2,template:n,axes,grid:true,minorGrid:defaultMinorGrid(),frame:true,zero:true,general:{...defaultGeneral(axes,n),unitFormat:"slash"}};
+  return {schemaVersion:currentSchemaVersion,template:n,axes,grid:true,minorGrid:defaultMinorGrid(),frame:true,zero:true,general:{...defaultGeneral(axes,n),unitFormat:"slash"}};
 }
 function geometry(a){
   const cell=56,count=d=>a[d].active?a[d].cells:0;
@@ -19,7 +22,7 @@ function geometry(a){
 }
 function defaultGeneral(axes,template){
   const {w,h,padX,padY}=geometry(axes);
-  return {width:w+2*padX,height:h+2*padY,title:template===3?"Diodenkennlinie":"Koordinatensystem",showTitle:false};
+  return {width:w+2*padX,height:h+2*padY,title:template===3?"Diodenkennlinie":"Koordinatensystem",showTitle:false,sizeUnit:"px"};
 }
 // Breite und Höhe bleiben in den Metadaten kompatibel zu früheren Pixel-Dateien.
 const pixelsPerMillimeter=96/25.4;
@@ -65,30 +68,66 @@ function formatAxisTitle(label,symbol,unit,format){
   parts.push({text});
   return parts;
 }
+function checkVersion(version){
+  if(!Number.isSafeInteger(version)||version<1)throw Error("Die Schemaversion fehlt oder ist ungültig.");
+  if(version!==currentSchemaVersion)throw Error("Die Schemaversion "+version+" wird nicht unterstützt.");
+}
+function hasFields(record,fields){
+  return record!==null && typeof record==="object" && !Array.isArray(record)
+    && Object.keys(record).length===fields.length && fields.every(key=>Object.hasOwn(record,key));
+}
 function validate(s){
-  if(!s||![1,2].includes(s.schemaVersion))throw Error("Diese Schemaversion wird nicht unterstützt.");
-  const axes={};
-  for(const d of dirs){
-    const axis=s.axes?.[d];
-    axes[d]={symbol:"",...axis};
+  checkVersion(s?.schemaVersion);
+  const axisFields=["active","title","symbol","unit","step","cells","decimals","sign"];
+  if(!hasFields(s,["schemaVersion","template","axes","grid","minorGrid","frame","zero","general"])
+    ||!Number.isInteger(s.template)||s.template<0||s.template>=names.length
+    ||!["grid","frame","zero"].every(key=>typeof s[key]==="boolean")
+    ||!hasFields(s.axes,dirs)||!dirs.every(dir=>hasFields(s.axes[dir],axisFields)
+      &&axisFields.every(key=>validValue(key,s.axes[dir][key])))){
+    throw Error("Die Datei enthält unvollständige oder ungültige Diagrammeinstellungen.");
   }
-  if(!names[s.template]||!Number.isInteger(s.template)||!["grid","frame","zero"].every(k=>typeof s[k]==="boolean")||!dirs.every(d=>["active","title","symbol","unit","step","cells","decimals","sign"].every(k=>validValue(k,axes[d][k]))))throw Error("Die Datei enthält ungültige Diagrammeinstellungen.");
-  if(s.schemaVersion===1)s={...s,schemaVersion:2,general:defaultGeneral(s.axes,s.template)};
-  const minorGrid=s.minorGrid===undefined?defaultMinorGrid():s.minorGrid;
-  if(typeof minorGrid?.enabled!=="boolean"||!gridDivisions.includes(minorGrid.divisions))throw Error("Die Hilfsgitter-Einstellungen sind ungültig.");
+  if(!hasFields(s.minorGrid,["enabled","divisions"])||typeof s.minorGrid.enabled!=="boolean"
+    ||!gridDivisions.includes(s.minorGrid.divisions))throw Error("Die Hilfsgitter-Einstellungen sind ungültig.");
   const g=s.general;
-  if(!g||(g.sizeUnit!==undefined&&!["px","mm"].includes(g.sizeUnit))||!validDimension(g.width)||!validDimension(g.height)||!validTitle(g.title)||typeof g.showTitle!=="boolean")throw Error("Die allgemeinen Diagrammeinstellungen sind ungültig.");
-  const unitFormat=g.unitFormat===undefined?"brackets":g.unitFormat;
-  if(!unitFormats.includes(unitFormat))throw Error("Das Format der Einheitenbeschriftung ist ungültig.");
-  return {...s,axes,minorGrid,general:{...g,unitFormat}};
+  if(!hasFields(g,["width","height","title","showTitle","sizeUnit","unitFormat"])
+    ||!["px","mm"].includes(g.sizeUnit)||!validDimension(g.width)||!validDimension(g.height)
+    ||!validTitle(g.title)||typeof g.showTitle!=="boolean"||!unitFormats.includes(g.unitFormat)){
+    throw Error("Die allgemeinen Diagrammeinstellungen sind ungültig.");
+  }
+  return s;
+}
+function diagramMetadata(s){
+  const metadata=document.createElementNS(NS,"metadata");
+  const record=document.createElementNS(diagramNamespace,"sdg:document");
+  record.setAttribute("version",String(currentSchemaVersion));
+  record.setAttribute("encoding","application/json");
+  record.textContent=JSON.stringify(s,null,2);
+  metadata.append(record);
+  return metadata;
+}
+function checkSvgSize(bytes){
+  if(bytes>maxSvgBytes)throw Error("Die SVG-Datei überschreitet die Grenze von 2 MiB.");
 }
 function readDiagram(source){
+  checkSvgSize(source.length);
+  checkSvgSize(new Blob([source]).size);
   if(/<!DOCTYPE/i.test(source))throw Error("SVG-Dateien mit Dokumenttyp-Deklaration werden nicht unterstützt.");
   const doc=new DOMParser().parseFromString(source,"image/svg+xml"), root=doc.documentElement;
-  if(root.localName!=="svg"||root.namespaceURI!==NS||doc.getElementsByTagName("parsererror").length)throw Error("Die Datei ist keine gültige SVG-Grafik.");
-  const records=Array.from(root.children).filter(e=>e.namespaceURI===NS&&e.localName==="metadata"&&e.id===META);
-  if(records.length!==1||records[0].children.length)throw Error("Die SVG enthält keine eindeutigen Metadaten des SVG-Diagramm-Generators.");
-  let data;try{data=JSON.parse(records[0].textContent)}catch{throw Error("Die Diagrammeinstellungen sind kein gültiges JSON.")}
+  if(root.localName!=="svg"||root.namespaceURI!==NS||doc.getElementsByTagNameNS("*","parsererror").length)throw Error("Die Datei ist keine gültige SVG-Grafik.");
+  const records=root.getElementsByTagNameNS(diagramNamespace,"document");
+  if(!records.length)throw Error("Die SVG enthält keine Projektdaten im aktuellen Generatorformat.");
+  if(records.length!==1)throw Error("Die SVG enthält mehrere Projektdatensätze.");
+  const record=records[0], parent=record.parentElement;
+  if(parent.localName!=="metadata"||parent.namespaceURI!==NS||parent.parentElement!==root
+    ||record.childElementCount)throw Error("Die Struktur der SVG-Projektdaten ist ungültig.");
+  const version=record.getAttribute("version");
+  if(!/^[1-9][0-9]*$/.test(version))throw Error("Die XML-Schemaversion fehlt oder ist ungültig.");
+  checkVersion(Number(version));
+  if(record.getAttribute("encoding")!=="application/json")throw Error("Die Kodierung der Projektdaten wird nicht unterstützt.");
+  const json=record.textContent;
+  if(json.length>maxMetadataLength)throw Error("Die eingebetteten Diagrammeinstellungen sind zu groß.");
+  let data;
+  try{data=JSON.parse(json)}catch{throw Error("Die Diagrammeinstellungen sind kein gültiges JSON.")}
   return validate(data);
 }
 function renderDiagram(s){
@@ -113,7 +152,7 @@ function renderDiagram(s){
     const size=Math.min(24,(w+2*padX-12)/Array.from(heading).length);
     add("text",{x:w/2,y:-padY-10,"text-anchor":"middle","font-size":size,"font-weight":"bold"},heading);
   }
-  add("metadata",{id:META},JSON.stringify(s));
+  svg.append(diagramMetadata(s));
   function line(x1,y1,x2,y2,color,width){add("line",{x1,y1,x2,y2,stroke:color,"stroke-width":width})}
   function label(x,y,value,anchor="middle"){return add("text",{x,y,"text-anchor":anchor},value)}
   if(s.minorGrid.enabled && w>0 && h>0){

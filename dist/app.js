@@ -143,18 +143,18 @@ for(const menu of document.querySelectorAll(".nav-menu")){
 }
 $("file").onchange=async()=>{
   const file=$("file").files[0];if(!file)return;
-  try{loadState(readDiagram(await file.text()));saveDraft();$("message").textContent="Diagramm geöffnet."}
+  try{
+    checkSvgSize(file.size);
+    loadState(readDiagram(await file.text()));
+    saveDraft();
+    $("message").textContent="Diagramm geöffnet.";
+  }
   catch(e){$("message").textContent="Öffnen fehlgeschlagen. "+e.message}
   $("file").value="";
 };
 function serializeDiagram(svg) {
   const copy = svg.cloneNode(true);
   for (const element of Array.from(copy.children)) {
-    if (element.localName === "metadata" && element.id === META) {
-      const settings = JSON.parse(element.textContent);
-      const lines = JSON.stringify(settings, null, 2).split("\n");
-      element.textContent = "\n    " + lines.join("\n    ") + "\n  ";
-    }
     // Innerhalb von <text> würde zusätzlicher Leerraum die Beschriftung ändern.
     element.before("\n  ");
   }
@@ -180,7 +180,7 @@ function saveDraft(){
     values[field.id]=field.type==="checkbox"?field.checked:field.value;
   }
   try{
-    localStorage.setItem(draftKey,JSON.stringify({version:1,state,values}));
+    localStorage.setItem(draftKey,JSON.stringify({version:2,state,values}));
     draftMessage.textContent="";
   }catch{
     draftMessage.textContent="Der Entwurf konnte nicht lokal gespeichert werden. Prüfe die Eingaben und sichere das Diagramm über „SVG speichern“.";
@@ -217,7 +217,13 @@ function startEditor(){
   if(saved===null){loadState(state);return}
   try{
     const draft=JSON.parse(saved);
-    if(draft?.version!==1||!draft.values)throw Error();
+    if(![1,2].includes(draft?.version)||!draft.values)throw Error();
+    // Frühere lokale Entwürfe verwenden das alte Zustandsformat 2, teils ohne sizeUnit.
+    if(draft.version===1){
+      if(draft.state?.schemaVersion!==2)throw Error();
+      draft.state.schemaVersion=currentSchemaVersion;
+      if(draft.state.general.sizeUnit===undefined)draft.state.general.sizeUnit="px";
+    }
     loadState(validate(draft.state));
     for(const field of diagramFields()){
       const value=draft.values[field.id];
