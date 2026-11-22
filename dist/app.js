@@ -99,7 +99,7 @@ function applyInputs(){
       const good=validValue(k,v);f.setAttribute("aria-invalid",String(!good));$("err-"+f.id).textContent=good?"":errors[k];ok&&=good;next.axes[d][k]=v;
     }
   }
-  $("size-unit").disabled=!ok;$("save").disabled=!ok;$("live").textContent=ok?"Aktuell":"Eingabe prüfen";$("message").textContent="";
+  $("size-unit").disabled=!ok;$("save").disabled=$("copy").disabled=!ok;$("live").textContent=ok?"Aktuell":"Eingabe prüfen";$("message").textContent="";
   if(ok){for(const k of ["grid","frame","zero"])next[k]=$(k).checked;state=next;paint()}
 }
 function loadState(s){
@@ -116,7 +116,7 @@ function loadState(s){
   divisionsField.value=s.minorGrid.divisions;
   divisionsField.disabled=!s.minorGrid.enabled;
   state=s;fields();for(const k of ["grid","frame","zero"])$(k).checked=s[k];
-  $("save").disabled=false;$("live").textContent="Aktuell";$("message").textContent="";paint();
+  $("save").disabled=$("copy").disabled=false;$("live").textContent="Aktuell";$("message").textContent="";paint();
 }
 for(const menu of document.querySelectorAll(".nav-menu")){
   const trigger=menu.querySelector("summary");
@@ -129,6 +129,7 @@ for(const menu of document.querySelectorAll(".nav-menu")){
     if(!item)return;
     closeMenu();
     if(item.id==="open-local")$("file").click();
+    else if(item.id==="open-clipboard") openClipboard();
     else {loadState(preset(Number(item.dataset.template)));saveDraft()}
   });
   menu.addEventListener("keydown",event=>{
@@ -141,17 +142,143 @@ for(const menu of document.querySelectorAll(".nav-menu")){
     if(!menu.contains(event.target))menu.open=false;
   });
 }
-$("file").onchange=async()=>{
-  const file=$("file").files[0];if(!file)return;
+function openDiagram(source){
+  loadState(readDiagram(source));
+  saveDraft();
+  $("message").textContent="Diagramm geöffnet.";
+}
+async function openFile(file){
   try{
     checkSvgSize(file.size);
-    loadState(readDiagram(await file.text()));
-    saveDraft();
-    $("message").textContent="Diagramm geöffnet.";
+    openDiagram(await file.text());
+  }catch(error){
+    $("message").textContent="Öffnen fehlgeschlagen. "+error.message;
   }
-  catch(e){$("message").textContent="Öffnen fehlgeschlagen. "+e.message}
+}
+$("file").onchange=async()=>{
+  const file=$("file").files[0];
   $("file").value="";
+  if(file)await openFile(file);
 };
+
+const preview=document.querySelector(".preview");
+window.addEventListener("dragover",event=>{
+  if(!event.dataTransfer.types.includes("Files"))return;
+  event.preventDefault();
+  const overPreview=preview.contains(event.target);
+  preview.classList.toggle("drop-active",overPreview);
+  event.dataTransfer.dropEffect=overPreview?"copy":"none";
+});
+preview.addEventListener("dragleave",event=>{
+  if(!preview.contains(event.relatedTarget))preview.classList.remove("drop-active");
+});
+window.addEventListener("drop",event=>{
+  preview.classList.remove("drop-active");
+  if(!event.dataTransfer.types.includes("Files"))return;
+  event.preventDefault();
+  if(!preview.contains(event.target))return;
+  const files=event.dataTransfer.files;
+  if(files.length===1)openFile(files[0]);
+  else $("message").textContent="Bitte genau eine SVG-Datei ablegen.";
+});
+
+const clipboardDialog=$("clipboard-dialog");
+const clipboardSource=$("clipboard-source");
+function showClipboardDialog(source){
+  const copying=source!==undefined;
+  $("clipboard-heading").textContent=copying?"SVG kopieren":"Aus Zwischenablage öffnen";
+  $("clipboard-instruction").textContent=copying?"Mit Strg+C (Mac: ⌘C) das Diagramm kopieren.":"SVG-Datei oder SVG-Quelltext mit Strg+V (Mac: ⌘V) einfügen.";
+  $("clipboard-error").textContent="";
+  $("clipboard-import").hidden=copying;
+  clipboardSource.readOnly=copying;
+  clipboardSource.value=source??"";
+  clipboardDialog.showModal();
+  clipboardSource.focus();
+  if(copying)clipboardSource.select();
+}
+$("clipboard-close").onclick=()=>clipboardDialog.close();
+clipboardDialog.addEventListener("close",()=>{clipboardSource.value=""});
+$("clipboard-import").onclick=()=>{
+  try{
+    openDiagram(clipboardSource.value);
+    clipboardDialog.close();
+  }catch(error){
+    $("clipboard-error").textContent="Öffnen fehlgeschlagen. "+error.message;
+    clipboardSource.focus();
+  }
+};
+const svgType="image/svg+xml";
+const filePasteHint="Der Browser stellt den Dateiinhalt nicht bereit. Ziehe die SVG-Datei auf die Vorschau oder öffne sie über die Dateiauswahl.";
+function clipboardError(message){
+  const target=clipboardDialog.open?"clipboard-error":"message";
+  $(target).textContent=message;
+}
+async function importClipboard(source){
+  try{
+    if(source instanceof Blob){
+      checkSvgSize(source.size);
+      source=await source.text();
+    }
+    openDiagram(source);
+    if(clipboardDialog.open)clipboardDialog.close();
+  }catch(error){
+    clipboardError("Öffnen fehlgeschlagen. "+error.message);
+  }
+}
+document.addEventListener("paste",event=>{
+  const data=event.clipboardData;
+  if(!data || (clipboardDialog.open && clipboardSource.readOnly))return;
+  const text=data.getData("text/plain");
+  const files=data.files;
+  const editing=event.target.closest("input, textarea, [contenteditable=true]");
+  const svgText=text.trimStart().startsWith("<");
+  // Beim Kopieren einer Grafik liefern manche Browser zusätzlich eine PNG-Datei.
+  const pastedSvg=files.length===1 && (files[0].type===svgType || /\.svg$/i.test(files[0].name));
+  if(editing && !clipboardDialog.open && !pastedSvg)return;
+  if(files.length>1){
+    event.preventDefault();
+    clipboardError("Bitte genau eine SVG-Datei einfügen.");
+    return;
+  }
+  const source=pastedSvg?files[0]:svgText?text:files[0];
+  if(source){
+    event.preventDefault();
+    importClipboard(source);
+  }else if(clipboardDialog.open || data.types.includes("text/uri-list")){
+    event.preventDefault();
+    clipboardError(filePasteHint);
+  }
+});
+async function openClipboard(){
+  try{
+    if(navigator.clipboard.read){
+      const items=await navigator.clipboard.read();
+      if(items.length>1){
+        clipboardError("Bitte genau ein Diagramm einfügen.");
+        return;
+      }
+      const item=items[0];
+      // Der Text erhält auch Metadaten, die Browser beim Lesen von SVG filtern.
+      for(const type of ["text/plain",svgType]){
+        if(!item?.types.includes(type))continue;
+        const blob=await item.getType(type);
+        if(type===svgType || (await blob.slice(0,1024).text()).trimStart().startsWith("<")){
+          await importClipboard(blob);
+          return;
+        }
+      }
+    }else{
+      const text=await navigator.clipboard.readText();
+      if(text.trimStart().startsWith("<")){
+        await importClipboard(text);
+        return;
+      }
+    }
+  }catch{
+    // Das native Einfügeereignis kann auch bei gesperrtem API-Zugriff Dateien liefern.
+  }
+  showClipboardDialog();
+}
 function serializeDiagram(svg) {
   const copy = svg.cloneNode(true);
   for (const element of Array.from(copy.children)) {
@@ -162,6 +289,37 @@ function serializeDiagram(svg) {
   const xml = new XMLSerializer().serializeToString(copy);
   return '<?xml version="1.0" encoding="UTF-8"?>\n' + xml + "\n";
 }
+function clipboardImageHtml(xml){
+  const image=document.createElement("img");
+  image.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(xml);
+  return image.outerHTML;
+}
+clipboardSource.addEventListener("copy",event=>{
+  if(!clipboardSource.readOnly || !event.clipboardData)return;
+  event.clipboardData.setData("text/html",clipboardImageHtml(clipboardSource.value));
+  event.clipboardData.setData("text/plain",clipboardSource.value);
+  event.preventDefault();
+});
+$("copy").onclick=async()=>{
+  const xml=serializeDiagram($("sheet").firstElementChild);
+  const svg=new Blob([xml],{type:svgType});
+  try{
+    if(!navigator.clipboard?.write || !window.ClipboardItem){
+      showClipboardDialog(xml);
+      return;
+    }
+    // Writer kann das eingebettete SVG auch über das HTML-Bild übernehmen.
+    const formats={
+      "text/html":new Blob([clipboardImageHtml(xml)],{type:"text/html"}),
+      "text/plain":new Blob([xml],{type:"text/plain"})
+    };
+    if(ClipboardItem.supports?.(svgType))formats[svgType]=svg;
+    await navigator.clipboard.write([new ClipboardItem(formats)]);
+    $("message").textContent="Diagramm als Grafik kopiert.";
+  }catch{
+    showClipboardDialog(xml);
+  }
+};
 $("save").onclick=()=>{
   const xml=serializeDiagram($("sheet").firstElementChild);
   const url=URL.createObjectURL(new Blob([xml],{type:"image/svg+xml;charset=utf-8"})),link=document.createElement("a");

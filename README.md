@@ -4,7 +4,7 @@ Statische, deutschsprachige Browser-App. Zum lokalen Start dist/index.html in ei
 
 Für GitHub Pages den Inhalt von dist/ in den Stammordner eines GitHub-Repositorys kopieren. Unter Settings → Pages → Deploy from a branch den Branch und /(root) wählen. Alle Ressourcen verwenden relative Pfade. Für eine Veröffentlichung unter MIT eine LICENSE mit dem MIT-Lizenztext und dem eigenen Copyright-Vermerk ergänzen.
 
-Die erste Ansicht verwendet die Diodenvorlage. Unter „Neu“ stehen +X / +Y, −X / −Y und Vier Richtungen zur Auswahl. „SVG öffnen“ öffnet eine lokale Datei oder lädt das Beispiel Diodenkennlinie. Ein Unterstrich im Größennamen oder Formelzeichen leitet einen Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
+Die erste Ansicht verwendet die Diodenvorlage. Unter „Neu“ stehen +X / +Y, −X / −Y und Vier Richtungen zur Auswahl. Über „SVG öffnen“ lassen sich lokale Dateien, SVG-Quelltext aus der Zwischenablage und das Beispiel Diodenkennlinie öffnen. Eine einzelne SVG-Datei kann auch auf die Live-Vorschau gezogen werden. Ein Unterstrich im Größennamen oder Formelzeichen leitet einen Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
 
 Mit „Entwurf auf diesem Gerät merken“ in der Kopfzeile lässt sich die lokale Entwurfsspeicherung einschalten. Die App merkt sich auch unfertige Eingaben und stellt den letzten Entwurf beim nächsten Öffnen im selben Browserprofil wieder her. Ausschalten löscht die lokale Sicherung. Für eine dauerhafte Kopie „SVG speichern“ verwenden.
 
@@ -15,6 +15,8 @@ Unter der Live-Vorschau lässt sich das Hilfsgitter unabhängig vom Raster einsc
 Unter „Allgemeine Einstellungen“ legen Breite und Höhe die gesamte SVG-Zeichenfläche wahlweise in Pixeln oder Millimetern fest. Das Koordinatensystem wird proportional eingepasst. Der Diagrammname bestimmt den Dateinamen und kann als Überschrift angezeigt werden. Bei leerem Namen wird Koordinatensystem.svg verwendet. Beim Einheitenwechsel entsprechen 96 px genau 25,4 mm. Der Export enthält die gewählte Einheit direkt an width und height.
 
 ## SVG speichern und wieder öffnen
+
+„SVG kopieren“ stellt das Diagramm als Grafik für Anwendungen wie LibreOffice Writer bereit. Die Zwischenablage enthält außerdem den vollständigen SVG-Quelltext zum Weiterbearbeiten im Generator. Eine im Dateimanager kopierte SVG-Datei lässt sich mit Strg+V (Mac: ⌘V) im Arbeitsbereich öffnen, wenn der Browser ihren Inhalt bereitstellt. Unter „SVG öffnen“ → „Aus Zwischenablage öffnen“ erscheint bei Bedarf ein Einfügefeld. Liefert der Browser nur den Dateipfad, verwende die Dateiauswahl oder ziehe die Datei auf die Vorschau.
 
 „SVG speichern“ schreibt die sichtbare Vektorgrafik und den vollständigen Diagrammzustand in dieselbe UTF-8-Datei. Der Zustand steht als JSON-Text in genau einem Projektelement unter einem direkten `<metadata>`-Kind des SVG-Wurzelelements. Der folgende Auszug zeigt die Hülle. Anstelle der Auslassung steht im Export das vollständige JSON-Objekt.
 

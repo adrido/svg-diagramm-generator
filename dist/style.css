@@ -551,3 +551,58 @@ header nav {
     margin: 0;
     accent-color: #ffd04b
 }
+.preview.drop-active {
+    position: relative;
+}
+
+.preview.drop-active::after {
+    content: "SVG zum Öffnen hier ablegen";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border: 3px dashed #465f82;
+    border-radius: inherit;
+    background: #edf3fbea;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+#clipboard-dialog {
+    width: min(32rem, 92vw);
+    border: 1px solid #cbd2da;
+    border-radius: 11px;
+    padding: 1.25rem;
+    color: inherit;
+}
+
+#clipboard-dialog::backdrop {
+    background: #18223270;
+}
+
+#clipboard-heading {
+    font-size: 1.2rem;
+    margin: 0 0 .75rem;
+}
+
+#clipboard-source {
+    display: block;
+    width: 100%;
+    margin: .5rem 0;
+    resize: vertical;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    margin-top: 1rem;
+}
+
+.dialog-actions button {
+    padding: .4rem .8rem;
+}
+
+.dialog-actions button[hidden] {
+    display: none;
+}

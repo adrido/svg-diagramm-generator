@@ -26,15 +26,27 @@
             </details>
             <details class="nav-menu" name="dateimenue">
                 <summary><i data-i="folder"></i>SVG öffnen</summary>
-                <div class="nav-items"><button id="open-local">Öffnen von lokaler Datei</button><button
-                        data-template="3">Beispiel Diodenkennlinie</button></div>
+                <div class="nav-items"><button id="open-local">Öffnen von lokaler Datei</button>
+                    <button id="open-clipboard">Aus Zwischenablage öffnen</button>
+                    <button data-template="3">Beispiel Diodenkennlinie</button></div>
             </details>
             <button id="save"><i data-i="save"></i>SVG speichern</button>
+            <button id="copy">SVG kopieren</button>
             <label class="draft-option" title="Beim Ausschalten wird der lokale Entwurf gelöscht."><input
                     id="remember-draft" type="checkbox" role="switch" autocomplete="off">Entwurf auf diesem Gerät
                 merken</label>
         </nav><input type="file" accept=".svg,image/svg+xml" hidden id="file">
     </header>
+    <dialog id="clipboard-dialog" aria-labelledby="clipboard-heading">
+        <h2 id="clipboard-heading"></h2>
+        <label for="clipboard-source" id="clipboard-instruction"></label>
+        <textarea id="clipboard-source" rows="6" spellcheck="false"></textarea>
+        <p id="clipboard-error" role="status"></p>
+        <div class="dialog-actions">
+            <button id="clipboard-close">Schließen</button>
+            <button id="clipboard-import">Öffnen</button>
+        </div>
+    </dialog>
     <main>
         <div class="intro">
             <div>
