@@ -9,8 +9,10 @@
 <div class="nav-items"><button data-template="0">+X / +Y</button><button data-template="1">−X / −Y</button><button data-template="2">Vier Richtungen</button></div></details>
 <details class="nav-menu" name="dateimenue"><summary><i data-i="folder"></i>SVG öffnen</summary>
 <div class="nav-items"><button id="open-local">Öffnen von lokaler Datei</button><button data-template="3">Beispiel Diodenkennlinie</button></div></details>
-<button id="save"><i data-i="save"></i>SVG speichern</button></nav><input type="file" accept=".svg,image/svg+xml" hidden id="file"></header>
+<button id="save"><i data-i="save"></i>SVG speichern</button>
+<label class="draft-option" title="Beim Ausschalten wird der lokale Entwurf gelöscht."><input id="remember-draft" type="checkbox" role="switch" autocomplete="off">Entwurf auf diesem Gerät merken</label></nav><input type="file" accept=".svg,image/svg+xml" hidden id="file"></header>
 <main><div class="intro"><div><h1>Arbeitsbereich</h1><p>Koordinatensystem konfigurieren und als SVG exportieren.</p></div><span class="local"><i data-i="lock"></i>Lokal im Browser</span></div>
+<div id="draft-message" role="status"></div>
 <div id="message" role="status"></div>
 <div class="workspace"><aside><details class="general" open><summary>Allgemeine Einstellungen</summary>
 <div class="fields">

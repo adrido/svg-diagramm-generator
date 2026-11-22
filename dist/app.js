@@ -64,6 +64,10 @@ $("size-unit").onchange=()=>{
   update();
 };
 function update(){
+  applyInputs();
+  saveDraft();
+}
+function applyInputs(){
   const next=structuredClone(state);let ok=true;
   next.minorGrid={enabled:$("minor-grid").checked,divisions:Number(divisionsField.value)};
   divisionsField.disabled=!next.minorGrid.enabled;
@@ -125,7 +129,7 @@ for(const menu of document.querySelectorAll(".nav-menu")){
     if(!item)return;
     closeMenu();
     if(item.id==="open-local")$("file").click();
-    else loadState(preset(Number(item.dataset.template)));
+    else {loadState(preset(Number(item.dataset.template)));saveDraft()}
   });
   menu.addEventListener("keydown",event=>{
     if(event.key==="Escape"&&menu.open){event.preventDefault();closeMenu()}
@@ -139,7 +143,7 @@ for(const menu of document.querySelectorAll(".nav-menu")){
 }
 $("file").onchange=async()=>{
   const file=$("file").files[0];if(!file)return;
-  try{loadState(readDiagram(await file.text()));$("message").textContent="Diagramm geöffnet."}
+  try{loadState(readDiagram(await file.text()));saveDraft();$("message").textContent="Diagramm geöffnet."}
   catch(e){$("message").textContent="Öffnen fehlgeschlagen. "+e.message}
   $("file").value="";
 };
@@ -163,7 +167,78 @@ $("save").onclick=()=>{
   const url=URL.createObjectURL(new Blob([xml],{type:"image/svg+xml;charset=utf-8"})),link=document.createElement("a");
   link.href=url;link.download=downloadName(state.general.title);document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
 };
-loadState(state);
+const draftKey="svg-diagramm-generator:entwurf:"+new URL(".",location.href).pathname;
+const rememberDraft=$("remember-draft");
+const draftMessage=$("draft-message");
+function diagramFields(){
+  return document.querySelectorAll(".workspace input[id], .workspace select[id]");
+}
+function saveDraft(){
+  if(!rememberDraft.checked)return;
+  const values={};
+  for(const field of diagramFields()){
+    values[field.id]=field.type==="checkbox"?field.checked:field.value;
+  }
+  try{
+    localStorage.setItem(draftKey,JSON.stringify({version:1,state,values}));
+    draftMessage.textContent="";
+  }catch{
+    draftMessage.textContent="Der Entwurf konnte nicht lokal gespeichert werden. Prüfe die Eingaben und sichere das Diagramm über „SVG speichern“.";
+  }
+}
+rememberDraft.onchange=()=>{
+  if(rememberDraft.checked){
+    saveDraft();
+    if(!draftMessage.textContent)draftMessage.textContent="Entwurf auf diesem Gerät gespeichert. Beim Ausschalten wird der lokale Entwurf gelöscht.";
+  }else{
+    try{
+      localStorage.removeItem(draftKey);
+      draftMessage.textContent="Lokaler Entwurf gelöscht.";
+    }catch{
+      rememberDraft.checked=true;
+      draftMessage.textContent="Der lokale Entwurf konnte nicht gelöscht werden.";
+    }
+  }
+};
+window.addEventListener("storage",event=>{
+  if((event.key===draftKey||event.key===null)&&event.newValue===null&&rememberDraft.checked){
+    rememberDraft.checked=false;
+    draftMessage.textContent="Die lokale Entwurfsspeicherung wurde in einem anderen Fenster aufgehoben.";
+  }
+});
+function startEditor(){
+  rememberDraft.checked=false;
+  let saved;
+  try{saved=localStorage.getItem(draftKey)}catch{
+    loadState(state);
+    draftMessage.textContent="Der lokale Speicher ist nicht verfügbar. Sichere dein Diagramm über „SVG speichern“.";
+    return;
+  }
+  if(saved===null){loadState(state);return}
+  try{
+    const draft=JSON.parse(saved);
+    if(draft?.version!==1||!draft.values)throw Error();
+    loadState(validate(draft.state));
+    for(const field of diagramFields()){
+      const value=draft.values[field.id];
+      if(field.type==="checkbox"){
+        if(typeof value!=="boolean")throw Error();
+        field.checked=value;
+      }else{
+        if(typeof value!=="string")throw Error();
+        field.value=value;
+        if(field.tagName==="SELECT"&&field.selectedIndex===-1)throw Error();
+      }
+    }
+    applyInputs();
+    rememberDraft.checked=true;
+    draftMessage.textContent="Lokaler Entwurf wiederhergestellt.";
+  }catch{
+    loadState(preset(3));
+    draftMessage.textContent="Der lokale Entwurf konnte nicht gelesen werden. Die Standardvorlage wurde geöffnet.";
+  }
+}
+startEditor();
 if ("serviceWorker" in navigator && ["https:", "http:"].includes(location.protocol)) {
   navigator.serviceWorker.register("./sw.js").catch(error => {
     console.warn("Der Offline-Modus konnte nicht aktiviert werden.", error);

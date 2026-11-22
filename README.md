@@ -6,6 +6,8 @@ Für GitHub Pages den Inhalt von dist/ in den Stammordner eines GitHub-Repositor
 
 Die erste Ansicht verwendet die Diodenvorlage. Unter „Neu“ stehen +X / +Y, −X / −Y und Vier Richtungen zur Auswahl. „SVG öffnen“ öffnet eine lokale Datei oder lädt das Beispiel Diodenkennlinie. Ein Unterstrich im Größennamen oder Formelzeichen leitet einen Index ein. Die Schrittweite bezeichnet den Wert eines gleich großen Rasterfelds. Die Pfeilspitze belegt den äußeren Endpunkt.
 
+Mit „Entwurf auf diesem Gerät merken“ in der Kopfzeile lässt sich die lokale Entwurfsspeicherung einschalten. Die App merkt sich auch unfertige Eingaben und stellt den letzten Entwurf beim nächsten Öffnen im selben Browserprofil wieder her. Ausschalten löscht die lokale Sicherung. Für eine dauerhafte Kopie „SVG speichern“ verwenden.
+
 Unter „Allgemeine Einstellungen“ gilt das Format der Einheitenbeschriftung für alle vier Achsenrichtungen. Neue Diagramme verwenden den Bruchstrich, etwa *t* / s oder *v* / (m/s). Alternativ stehen die Schreibweise mit „in“, runde Klammern und eckige Klammern zur Wahl. Jede Richtung hat eigene Felder für Größenname, kursives Formelzeichen und Einheit. Leere Felder werden ausgelassen. Ältere SVG-Dateien ohne Formatangabe öffnen sich mit eckigen Klammern und übernehmen den bisherigen Achsentitel als Größenname.
 
 Unter der Live-Vorschau lässt sich das Hilfsgitter unabhängig vom Raster einschalten. Es teilt jedes Rasterfeld auf beiden Achsen in 2, 4, 5 oder 10 gleiche Abschnitte. Bei neuen Diagrammen und beim Öffnen älterer SVGs ohne Hilfsgitter-Einstellungen ist es ausgeschaltet. Beim Speichern werden Sichtbarkeit und Unterteilung mitgesichert.
