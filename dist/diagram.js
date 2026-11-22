@@ -183,7 +183,7 @@ function renderDiagram(s){
     title.setAttribute("style","white-space: pre");
     for(const part of formatAxisTitle(v.title,v.symbol,v.unit,s.general.unitFormat)){
       const attrs={};
-      if(part.italic)attrs["font-style"]="italic";
+      if(part.italic)Object.assign(attrs,{"font-family":"serif","font-style":"italic"});
       if(part.subscript)Object.assign(attrs,{"baseline-shift":"sub","font-size":12});
       add("tspan",attrs,part.text,title);
     }
